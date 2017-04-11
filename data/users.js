@@ -20,7 +20,7 @@ let exportedMethods = {
             });
         });
     },
-    addUser(password, sessionId, profile) {
+    addUser(password, sessionId, name, books = [], profileImage = "") {
         return users().then((userCollection) => {
             bcrpyt.hash(password, null, null, (err, hash) => {
                 let newUser = {
@@ -28,9 +28,9 @@ let exportedMethods = {
                     hashedPassword: hash,
                     sessionId: sessionId,
                     profile: {
-                        name: profile.name,
-                        books: profile.books,
-                        profileImage: profile.profileImage
+                        name: name,
+                        books: books,
+                        profileImage: profileImage
                     }
                 };
                 return userCollection.insertOne(newUser).then((insertedInfo) => {
@@ -55,9 +55,10 @@ let exportedMethods = {
             return userCollection.findOne({_id: id}).then((user) => {
                 let updatedUserData = {
                     profile: {
-                        name: updatedUser.profile.name,
+                        name: updatedUser.name,
+                        profileImage: updatedUser.profileImage
                     }
-                };
+                }
 
                 let updateCommand = {
                     $set: updatedUserData
