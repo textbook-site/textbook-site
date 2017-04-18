@@ -18,15 +18,33 @@ let exportedMethods = {
             });
         });
     },
-    addBook(name, author, isbn, courses = []) {
+    getBookByIsbn(isbn) {
+        return books().then((bookCollection) => {
+            return bookCollection.findOne({isbn: isbn}).then((book) => {
+                if(!book) {
+                  throw("Could not find book with that isbn");  
+                }
+                return book;
+            });
+        });
+    },
+    addBook(name, author, isbn, courses) {
         return books().then((bookCollection) => {
             let newBook = {
                 _id: uuid.v4(),
                 name: name,
                 author: author,
                 isbn: isbn,
-                courses: courses
-            }
+                courses: []
+                }
+            newBook.courses = courses.map((element) => {
+                return newCourse = {
+                        _id: uuid.v4(),
+                        courseName: element.courseName,
+                        courseId: element.courseId,
+                        professor: element.professor
+                    }
+                });    
             bookCollection.insertOne(newBook).then((insertedInfo) => {
                 return insertedInfo.insertedId;
             }).then((newId) => {

@@ -17,27 +17,25 @@ code once, to have some
 data in database
 */
 
-// users.addUser("thispasswordwillbehashed", "thisissessionid",
-//              "John Smith", [{
-//                  isbn: "595939",
-//                  condition: "Good",
-//                  price: 50}], "pathtoprofileimage");
+// users.addUser("thispasswordwillbehashed",
+//              "John Smith", "profileImage");
+             
 
-
+             
 
 // books.addBook("Alexander Hamilton", "Alexander Churnhow", "123456", [{
-//     name: "History",
+//     courseName: "History",
 //     courseId: "1234",
 //     professor: "Professor Smith"
 // }]);
 
 // books.addBook("Calculus", "Ron Larson", "78910", [{
-//     name: "Calculus 1",
+//     courseName: "Calculus 1",
 //     courseId: "5678",
 //     professor: "Professor Doe"
 //     },
 //     {
-//     name: "Calculus 2",
+//     courseName: "Calculus 2",
 //     courseId: "59359",
 //     professor: "Professor Jackson"
 //     }

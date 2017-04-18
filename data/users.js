@@ -1,7 +1,9 @@
 const mongoCollection = require('../config/mongoCollections');
 const users = mongoCollection.users;
+const books = require("../data/books")
 const uuid = require('uuid');
 const bcrpyt = require('bcrypt-nodejs');
+
 
 let exportedMethods = {
 
@@ -20,18 +22,17 @@ let exportedMethods = {
             });
         });
     },
-    addUser(password, sessionId, name, books = [], profileImage = "") {
+    addUser(password, name, profileImage = "") {
         return users().then((userCollection) => {
             bcrpyt.hash(password, null, null, (err, hash) => {
                 let newUser = {
                     _id: uuid.v4(),
                     hashedPassword: hash,
-                    sessionId: sessionId,
                     profile: {
                         name: name,
-                        books: books,
+                        books: [],
                         profileImage: profileImage
-                    }
+                    },
                 };
                 return userCollection.insertOne(newUser).then((insertedInfo) => {
                     return insertedInfo.insertedId;
@@ -70,24 +71,25 @@ let exportedMethods = {
             });
         });
     },
-    addBookToUser(userId, book) {
+    addBookToUser(userId, bookInfo) {
         return users().then((userCollection) => {
-            return userCollection.updateOne({_id: userId}, {
+            userCollection.updateOne({_id: userId}, {
                 $push: {
-                    books: {
-                       isbn: book.isbn,
-                       condition: book.condition,
-                       price: book.price 
+                    "profile.books": {
+                        isbn: bookInfo.isbn,
+                        condition: bookInfo.condition,
+                        price: bookInfo.price
                     }
                 }
-            });
-        });
+            }); 
+        })
+
     },
     removeBookFromUser(userId, book) {
         return users().then((userCollection) => {
             return userCollection.updateOne({_id: userId}, {
                 $pull: {
-                    books: {
+                    inventory: {
                         isbn: book.isbn
                     }
                 }
