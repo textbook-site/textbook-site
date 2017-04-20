@@ -1,0 +1,14 @@
+<article class="search">
+    <form method="post">
+        <fieldset>
+            <label for="Course" class="labelitem">Course:</label>
+              <select name="Course" id="Course" required>
+                <option value="" selected disabled>Choose a Course</option>
+                {{#each course}}
+                    <option value="course">course</option>
+                {{/each}}
+              </select><br /> 
+        </fieldset>
+        <button type="submit" class="btn btn-warning btn-lg">search</button>
+    </form>
+</article>  

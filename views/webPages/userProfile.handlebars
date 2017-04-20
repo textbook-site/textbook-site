@@ -1,0 +1,9 @@
+<article class="userProfile">
+	<h3>{{users.name}}</h3>
+	<img src="{{users.profileImage}}" width="200" />
+	<ul>
+	    {{#each user.books}}
+	      <li><a href="books/{{this}}">{{users.books.name}}</a></li>
+	    {{/each}}
+	</ul>
+</article>
