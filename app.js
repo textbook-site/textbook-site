@@ -161,32 +161,6 @@ app.get('/search', function(req, res) {
   // search by course, isbn, book name
 });
 
-// Seeding
-// users.addUser("thispasswordwillbehashed",
-//              "John Smith", "profileImage");
-//  users.addUser("test",
-//               "test", "profileImage");            
-
-             
-
-// books.addBook("Alexander Hamilton", "Alexander Churnhow", "123456", [{
-//     courseName: "History",
-//     courseId: "1234",
-//     professor: "Professor Smith"
-// }]);
-
-// books.addBook("Calculus", "Ron Larson", "78910", [{
-//     courseName: "Calculus 1",
-//     courseId: "5678",
-//     professor: "Professor Doe"
-//     },
-//     {
-//     courseName: "Calculus 2",
-//     courseId: "59359",
-//     professor: "Professor Jackson"
-//     }
-// ]);
-
 app.listen(3000, () => {
     console.log("We've now got a server!");
     console.log("Your routes will be running on http://localhost:3000");
