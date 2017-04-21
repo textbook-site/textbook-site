@@ -22,11 +22,20 @@ let exportedMethods = {
             });
         });
     },
-    addUser(password, name, profileImage = "") {
+    getUserByUsername(username) {
+        return users().then((userCollection) => {
+            if(!user) {
+                throw "Sorry, could not find user with that username";
+            }
+            return user;
+        });
+    },
+    addUser(username, password, name, profileImage = "") {
         return users().then((userCollection) => {
             bcrpyt.hash(password, null, null, (err, hash) => {
                 let newUser = {
                     _id: uuid.v4(),
+                    username: username,
                     hashedPassword: hash,
                     profile: {
                         name: name,

@@ -36,7 +36,7 @@ let exportedMethods = {
                 author: author,
                 isbn: isbn,
                 courses: []
-                }
+                };
             newBook.courses = courses.map((element) => {
                 return newCourse = {
                         _id: uuid.v4(),
