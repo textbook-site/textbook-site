@@ -22,6 +22,16 @@ let exportedMethods = {
             });
         });
     },
+    getUserByName(name) {
+        return users().then((userCollection) =>{
+            userCollection.findOne({'profile.name': name}).then((user) => {
+                if(user === undefined || !user) {
+                    throw "Sorry, user not found";
+                }
+                return user;
+            });
+        });
+    },
     addUser(password, name, profileImage = "") {
         return users().then((userCollection) => {
             bcrpyt.hash(password, null, null, (err, hash) => {
