@@ -12,6 +12,7 @@ const hash = bcrypt.hashSync("plainTextPassword");
 var books = require("./data/books");
 var users = require("./data/users");
 
+
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
     // Specify helpers which are only registered on this instance.
