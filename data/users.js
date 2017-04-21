@@ -22,6 +22,7 @@ let exportedMethods = {
             });
         });
     },
+<<<<<<< HEAD
     getUserByUsername(username) {
         return users().then((userCollection) => {
             if(!user) {
@@ -31,6 +32,19 @@ let exportedMethods = {
         });
     },
     addUser(username, password, name, profileImage = "") {
+=======
+    getUserByName(name) {
+        return users().then((userCollection) =>{
+            userCollection.findOne({'profile.name': name}).then((user) => {
+                if(user === undefined || !user) {
+                    throw "Sorry, user not found";
+                }
+                return user;
+            });
+        });
+    },
+    addUser(password, name, profileImage = "") {
+>>>>>>> 64bb2a91b8f0ef7294d64dad6719ed2be862880a
         return users().then((userCollection) => {
             bcrpyt.hash(password, null, null, (err, hash) => {
                 let newUser = {
