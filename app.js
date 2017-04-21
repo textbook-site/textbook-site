@@ -3,14 +3,30 @@ const app = express();
 const bodyParser = require('body-parser');
 const static = express.static(__dirname + '/public');
 const data = require('./data');
+const exphbs = require('express-handlebars');
+const Handlebars = require('handlebars');
 const users = data.users;  // will be removed in production, only to seed db
 const books = data.books;  // ditto
+
+const handlebarInstance = exphbs.create({
+    defaultLayout: 'main',
+    helpers: {
+        asJSON: (obj, spacing) => {
+            if(typeof spacing == 'number') 
+                return new Handlebars.SafeString(JSON.stringify(obj, null, spacing))
+
+            return new Handlebars.SafeString(JSON.stringify(obj));
+        }
+    }
+});
 
 
 app.use('/public', static);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
+app.engine('handlebars', handlebarInstance.engine);
+app.set('view engine', 'handlebars');
 
 /*run npm start with this 
 code once, to have some 
@@ -40,8 +56,6 @@ data in database
 //     professor: "Professor Jackson"
 //     }
 // ]);
-
-
 
 
 app.listen(3000, () => {
