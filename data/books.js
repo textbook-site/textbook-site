@@ -98,7 +98,10 @@ let exportedMethods = {
             let allCourses = []
             bookArray.forEach((element) => {
                 if(element.courses.length != 0) {
-                    allCourses.push(element.courses);
+                    for (var i=0; i< element.courses.length; i++) {
+                        if (allCourses.indexOf(element.courses[i] != -1)) // Check that the course doesn't already exist in the list
+                            allCourses.push(element.courses[i]);
+                    }
                 }
             });
             return allCourses;

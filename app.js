@@ -155,7 +155,7 @@ app.get('/logout',
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.render('webpages/userProfile', { user: req.user});
+    res.render('webPages/userProfile', { user: req.user});
   });
 
 app.post('/listBook', function(req, res) {
@@ -163,6 +163,11 @@ app.post('/listBook', function(req, res) {
 });
 
 app.get('/search', function(req, res) {
+  var allCourses;
+  books.getAllCourses().then((courses) => {
+    allCourses = courses;
+    res.render('webPages/searchPage', {courses: allCourses});
+  });
   // search by course, isbn, book name
 });
 
