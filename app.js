@@ -34,9 +34,8 @@ const handlebarsInstance = exphbs.create({
 // will be set at `req.user` in route handlers after authentication.
 passport.use(new Strategy(
   function(username, password, cb) {
-    db.users.getUserByName(username).then((e) => {
+    db.users.getUserByUsername(username).then((user) => {
         bcrypt.compare(password, user.hashedPassword, (err, res) => {
-            console.log("Here");
             if (res != true) {
                 return cb(null, false);
             }
@@ -71,9 +70,12 @@ passport.serializeUser(function(user, cb) {
 });
 
 passport.deserializeUser(function(id, cb) {
-  db.users.findById(id, function (err, user) {
-    if (err) { return cb(err); }
+  console.log("ID: " + id);
+  // try {
+  db.users.getUserById(id).then((user) => {
     cb(null, user);
+  }).catch((err) => {
+    return cb(err);
   });
 });
 
@@ -118,13 +120,15 @@ app.get('/login',
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/login', failureFlash: 'Invalid username or password.' }),
   function(req, res) {
-    res.redirect('/login');
+    res.redirect('/');
+    // res.render('webPages/home', { user: req.user } );
+    return;
   });
 
-app.get('/profile',
-  function(req, res){
-    res.render('webPages/userProfile');
-  });
+// app.get('/profile',
+//   function(req, res){
+//     res.render('webPages/userProfile', {user: req.user});
+//   });
 
 app.get('/register',
   function(req, res){
@@ -151,7 +155,7 @@ app.get('/logout',
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.render('login/profile', { user: req.user, title: "Profile" });
+    res.render('webpages/userProfile', { user: req.user});
   });
 
 app.post('/listBook', function(req, res) {
