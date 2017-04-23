@@ -93,6 +93,17 @@ let exportedMethods = {
             });
         });
     },
+    getAllCourses() {
+        return this.getAllBooks().then((bookArray) => {
+            let allCourses = []
+            bookArray.forEach((element) => {
+                if(element.courses.length != 0) {
+                    allCourses.push(element.courses);
+                }
+            });
+            return allCourses;
+        });
+    },
     removeCourseFromBook(bookId, course) {
         return books().then((bookCollection) => {
             return bookCollection.removeOne({_id: id},{
