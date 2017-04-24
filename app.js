@@ -12,6 +12,23 @@ const hash = bcrypt.hashSync("plainTextPassword");
 var books = require("./data/books");
 var users = require("./data/users");
 
+// books.addBook("European History Book", "John Smith", "978-2-10-495680-3",
+//                  [
+//                     {
+//                         courseName: "European History",
+//                         courseId: "59359",
+//                         professor: "Professor Jackson"
+//                     },
+//                     {
+//                         courseName: "European History II",
+//                         courseId: "19581",
+//                         professor: "Professor Washington"
+//                     }
+//                     ]);
+
+let foo = books.getAllCourses().then((courseArray) => {
+  console.log(courseArray);
+})
 
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',

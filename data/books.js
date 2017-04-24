@@ -2,6 +2,14 @@ const mongoCollections = require('../config/mongoCollections');
 const books = mongoCollections.books;
 const uuid = require('uuid');
 
+function uniqueValues(courseId, courseArray) {
+    for(let i = 0; i < courseArray.length; i++) {
+        if(courseId === courseArray[i].courseId)
+            return false;
+    }
+    return true;
+}
+
 let exportedMethods = {
     getAllBooks() {
         return books().then((bookCollection) => {
@@ -99,7 +107,7 @@ let exportedMethods = {
             bookArray.forEach((element) => {
                 if(element.courses.length != 0) {
                     for (var i=0; i< element.courses.length; i++) {
-                        if (allCourses.indexOf(element.courses[i] != -1)) // Check that the course doesn't already exist in the list
+                        if (uniqueValues(element.courses[i].courseId, allCourses)) // Check that the course doesn't already exist in the list
                             allCourses.push(element.courses[i]);
                     }
                 }
