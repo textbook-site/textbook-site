@@ -1,10 +1,21 @@
-<article class="home">
-  <ul>
-    {{#each books}}
-      <li><a href="books/{{this._id}}">{{this.name}}</a></li>
-    {{/each}}
-    {{#if errror}}
-    {{error}}
-    {{/if}}
-  </ul>
-</article>
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+		<article class="home">
+		  <div id="wrapper">
+		    {{#each books}}
+			    <ul class="display_books">
+			      <li><a class="bookname" href="books/{{this._id}}">{{this.name}}</a></li>
+			      <img src="{{this.book_image}}" width="200" />
+			      <li class="author">{{this.author}}</li>
+		      	</ul>
+		    {{/each}}
+		    {{#if errror}}
+		    {{error}}
+		    {{/if}}
+		  </div>
+		</article>
+		{{#if error}}
+        {{error}}
+        {{/if}}
+    </div>
+</div>
