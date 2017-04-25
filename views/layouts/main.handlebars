@@ -3,33 +3,35 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Book Website</title>
-		<link rel="stylesheet" type="text/css" href="../public/css/main.css" />
 		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../public/css/main.css" />
 	</head>
 
 	<body>
-		{{!--<h1>Book Website</h1>--}}
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<ul class="nav navbar-nav">
-					<li><a href="{{id}}">Home</a></li>
+					<li><a href="/">Home</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{{id}}">Login</a></li>
-					<li><a href="{{id}}">SignUp</a></li>
-					<li><a href="{{id}}">Search Page</a></li>
+					<li><a href="/login">Login</a></li>
+					<li><a href="/register">SignUp</a></li>
+					<li><a href="/search">Search Page</a></li>
 				</ul>
 			</div>			
 		</nav>
 
 		<main>
 			<div class="container">
-				{{{body}}}
+				<div class="row">
+		            <div class="col-sm-6">
+		                {{{body}}}
+		            </div>
+		        </div>
 			</div>
             
 		</main>
 
-		<script src="/public/js/form.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</body>
