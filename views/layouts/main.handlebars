@@ -14,8 +14,14 @@
 					<li><a href="/">Home</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/login">Login</a></li>
-					<li><a href="/register">SignUp</a></li>
+					{{#if user}}
+						<li><a class="hide" href="/login">Login</a></li>
+						<li><a href="/logout">Logout</a></li>
+					{{else}}
+						<li><a href="/login">Login</a></li>
+						<li><a class="hide" href="/logout">Logout</a></li>
+						<li><a href="/register">SignUp</a></li>
+					{{/if}}
 					<li><a href="/search">Search Page</a></li>
 				</ul>
 			</div>			
