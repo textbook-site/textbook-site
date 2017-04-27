@@ -2,4 +2,9 @@
 	<h3>{{books.name}}</h3>
 	<h4>{{books.author}}</h4>
 	<p>{{books.courses.courseName}}</p>
+	{{#each prices}}
+		<p>Seller ID: {{this.sellerId}}</p>
+		<p>Seller Username: {{this.sellerUsername}}</p>
+		<p>Price: {{this.price}}</p>
+	{{/each}}
 </article>

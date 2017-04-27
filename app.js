@@ -26,9 +26,9 @@ var users = require("./data/users");
 //                     }
 //                     ]);
 
-let foo = books.getAllCourses().then((courseArray) => {
-  console.log(courseArray);
-})
+// let foo = books.getAllCourses().then((courseArray) => {
+//   console.log(courseArray);
+// })
 
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
@@ -129,6 +129,27 @@ app.get('/',
     });
   });
 
+app.get('/books/:id',
+  function(req, res) {
+    var theBooks = books.getBookById(req.params.id).then((thisBook) => {
+      var prices = [];
+      users.getAllUsers().then((t_users) => {
+        for (let user in t_users) {
+          // console.log(t_users[user]);
+          var thisUser = t_users[user];
+          for (let userBook in thisUser.profile.books) {
+            var thisBook = thisUser.profile.books[userBook];
+            console.log(thisBook);
+            if (thisBook.isbn == thisBook.isbn) {
+              prices.push({sellerId: thisUser._id, sellerUsername: thisUser.username, price: thisBook.price});
+              console.log("Price: " + thisBook.price);
+            }
+          }
+        }
+      });
+      res.render('webPages/singlebook', { books: thisBook, user: req.user, prices: prices } );
+    });
+  });
 app.get('/login',
   function(req, res){
     res.render('webPages/login', {error: req.flash('error'), title: "Login"});

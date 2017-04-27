@@ -19,6 +19,11 @@ dbConnection().then(db => {
     }).then(() => {
         return users.addUser("mlong", "rasberry", "Megan");
     }).then(() => {
+        let user = users.getUserByUsername("wacosta").then((u) => {
+            let bookInfo = { isbn: "978-2-12-345680-3", price: "1.00", condition: "new" }
+            return users.addBookToUser(u._id, bookInfo);
+        });
+    }).then(() => {
         return books
             .addBook("American History Book", "Jack Black", "978-2-12-345680-3", [])
             .then(() => {
