@@ -170,18 +170,16 @@ app.post('/login',
 
 app.get('/register',
   function(req, res){
-    res.render('login/register');
+    res.render('webPages/register');
   });
   
 app.post('/register',
   function(req, res) {
     var username = req.body.username;
-    bcrypt.hash(req.body.password, 10).then((res) => {
-      var password = res;
-      var sessionId = ''; // TODO: Remove
-
-      users.addUser(password, sessionId, username);
-      res.render('login/register');
+    var password = req.body.password;
+    var name = req.body.name;
+    users.addUser(username,password,name).then((a) => {
+      res.redirect('/login');
     }).catch((err) => { res.render('login/register', {error: err}); });
   });
 app.get('/logout',
