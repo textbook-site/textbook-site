@@ -249,7 +249,7 @@ app.get('/search', function(req, res) {
   // search by course, isbn, book name
 });
 
-app.post('/search', function(req, res) { // TODO: Implement
+app.post('/search', function(req, res) {
   var allCourses;
   books.getAllCourses().then((courses) => {
     allCourses = courses;
