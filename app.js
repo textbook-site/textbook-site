@@ -88,7 +88,7 @@ passport.serializeUser(function(user, cb) {
 });
 
 passport.deserializeUser(function(id, cb) {
-  console.log("ID: " + id);
+  // console.log("ID: " + id);
   // try {
   db.users.getUserById(id).then((user) => {
     cb(null, user);
@@ -193,10 +193,24 @@ app.get('/logout',
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.render('webPages/userProfile', { user: req.user});
+    books.getAllBooks().then((allBooks) => {
+      for (let userBook in req.user.profile.books) {
+        for (let _books in allBooks) {
+          if (req.user.profile.books[userBook].isbn == allBooks[_books].isbn) {
+              req.user.profile.books[userBook].name = allBooks[_books].name;
+          }
+        }
+      }
+      res.render('webPages/userProfile', { user: req.user });
+    });
   });
 
 app.get('/addBook',  
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    res.render('webPages/addBook', { user: req.user});
+  });
+app.post('/addBook',  
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
     res.render('webPages/addBook', { user: req.user});

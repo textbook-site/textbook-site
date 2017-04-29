@@ -7,9 +7,9 @@
 	</form>
 
 	<ul>
-		{{#if this.user.books}}
-	    {{#each user.books}}
-	      <li><a href="books/{{this}}">{{users.books.name}}</a></li>
+		{{#if user.profile.books}}
+	    {{#each user.profile.books}}
+	      <li><a href="books/{{this}}">{{this.name}}</a></li>
 	    {{/each}}
 	</ul>
 		{{else}}
