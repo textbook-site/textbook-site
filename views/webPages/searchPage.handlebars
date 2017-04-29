@@ -1,11 +1,12 @@
 <article class="search">
     <form method="post">
+        <h3>Search for a book</h3>
         <fieldset>
             <label for="Course" class="labelitem">Course:</label>
               <select name="Course" id="Course" required>
                 <option value="" selected disabled>Choose a Course</option>
                 {{#each courses}}
-                    <option value="course">course</option>
+                    <option value="course">{{this.courseName}}</option>
                 {{/each}}
               </select><br /> 
         </fieldset>
