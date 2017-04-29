@@ -253,6 +253,19 @@ app.post('/search', function(req, res) { // TODO: Implement
   var allCourses;
   books.getAllCourses().then((courses) => {
     allCourses = courses;
+    if (req.body.Course === undefined || req.body.Course == "") {
+      res.render('webPages/searchPage', {courses: allCourses, error: "You must provide a course"});
+      return;
+    }
+    books.getAllBooks().then((allBooks) => {
+      for (var i in allBooks) {
+        for (var y in allBooks[i].courses) {
+          if (req.body.Course == allBooks[i].courses[y]._id) {
+            // 
+          }
+        }
+      }
+    });
     res.render('webPages/searchPage', {courses: allCourses});
   });
   // search by course, isbn, book name
