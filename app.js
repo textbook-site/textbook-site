@@ -171,11 +171,6 @@ app.post('/login',
     return;
   });
 
-// app.get('/profile',
-//   function(req, res){
-//     res.render('webPages/userProfile', {user: req.user});
-//   });
-
 app.get('/register',
   function(req, res){
     res.render('webPages/register');
@@ -236,21 +231,15 @@ app.post('/addBook',
     }
   });
 
-
-app.post('/listBook', function(req, res) {
-  // list book for sale
-});
-
 app.get('/search', function(req, res) {
   var allCourses;
   books.getAllCourses().then((courses) => {
     allCourses = courses;
     res.render('webPages/searchPage', {courses: allCourses});
   });
-  // search by course, isbn, book name
 });
 
-app.post('/search', function(req, res) { // TODO: Implement
+app.post('/search', function(req, res) {
   var allCourses;
   books.getAllCourses().then((courses) => {
     allCourses = courses;
@@ -259,17 +248,17 @@ app.post('/search', function(req, res) { // TODO: Implement
       return;
     }
     books.getAllBooks().then((allBooks) => {
+      var booksForCourse = [];
       for (var i in allBooks) {
         for (var y in allBooks[i].courses) {
           if (req.body.Course == allBooks[i].courses[y]._id) {
-            // 
+            booksForCourse.push(allBooks[i]);
           }
         }
       }
-    });
-    res.render('webPages/searchPage', {courses: allCourses});
+      res.render('webPages/searchPage', {courses: allCourses, books: booksForCourse });
+    }).catch((err) => { res.render('webPages/searchPage', {courses: allCourses, error: err}); });
   });
-  // search by course, isbn, book name
 });
 app.get('/cart',
   function(req, res){
