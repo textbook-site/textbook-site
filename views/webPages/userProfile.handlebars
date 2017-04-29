@@ -9,7 +9,7 @@
 	<ul>
 		{{#if user.profile.books}}
 	    {{#each user.profile.books}}
-	      <li><a href="books/{{this}}">{{this.name}}</a></li>
+	      <li><a href="books/{{this.bookID}}">{{this.name}} by {{this.author}}</a></li>
 	    {{/each}}
 	</ul>
 		{{else}}

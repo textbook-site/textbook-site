@@ -200,6 +200,8 @@ app.get('/profile',
         for (let _books in allBooks) {
           if (req.user.profile.books[userBook].isbn == allBooks[_books].isbn) {
               req.user.profile.books[userBook].name = allBooks[_books].name;
+              req.user.profile.books[userBook].author = allBooks[_books].author;
+              req.user.profile.books[userBook].bookID = allBooks[_books]._id;
           }
         }
       }

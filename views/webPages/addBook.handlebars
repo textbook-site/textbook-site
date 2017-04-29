@@ -3,7 +3,7 @@
             <form action="/addBook" method="post">
                 <div class="form-group">
                     <label>Book</label></br/>
-                    <select>
+                    <select name="isbn">
                     {{#each books}}
                     <option value={{this.isbn}}>{{this.name}}</option>
                     {{/each}}
