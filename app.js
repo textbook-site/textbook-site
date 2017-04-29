@@ -258,15 +258,16 @@ app.post('/search', function(req, res) { // TODO: Implement
       return;
     }
     books.getAllBooks().then((allBooks) => {
+      var booksForCourse = [];
       for (var i in allBooks) {
         for (var y in allBooks[i].courses) {
           if (req.body.Course == allBooks[i].courses[y]._id) {
-            // 
+            booksForCourse.push(allBooks[i]);
           }
         }
       }
-    });
-    res.render('webPages/searchPage', {courses: allCourses});
+      res.render('webPages/searchPage', {courses: allCourses, books: booksForCourse });
+    }).catch((err) => { res.render('webPages/searchPage', {courses: allCourses, error: err}); });
   });
   // search by course, isbn, book name
 });
