@@ -7,6 +7,7 @@ var flash = require('connect-flash');
 const exphbs = require('express-handlebars');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
+const Cookies = require("cookies");
 const hash = bcrypt.hashSync("plainTextPassword");
 const static = express.static(__dirname + '/public');
 
@@ -214,7 +215,9 @@ app.get('/profile',
 app.get('/addBook',  
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.render('webPages/addBook', { user: req.user});
+    books.getAllBooks((allBooks) => { 
+      res.render('webPages/addBook', { user: req.user, books: allBooks});
+    });
   });
 app.post('/addBook',  
   require('connect-ensure-login').ensureLoggedIn(),
@@ -246,6 +249,25 @@ app.get('/search', function(req, res) {
   // search by course, isbn, book name
 });
 
+app.post('/search', function(req, res) { // TODO: Implement
+  var allCourses;
+  books.getAllCourses().then((courses) => {
+    allCourses = courses;
+    res.render('webPages/searchPage', {courses: allCourses});
+  });
+  // search by course, isbn, book name
+});
+app.get('/cart',
+  function(req, res){
+    _cookies = new Cookies(req, res);
+    console.log(_cookies.get("shoppingCart"));
+    var cart = _cookies.get("shoppingCart");
+    if (cart === undefined)
+      cart = "";
+    else
+      cart = JSON.parse(cart);
+    res.render('webPages/purchase', {books: cart});
+  });
 app.listen(3000, () => {
     console.log("We've now got a server!");
     console.log("Your routes will be running on http://localhost:3000");
