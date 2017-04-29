@@ -215,10 +215,11 @@ app.get('/profile',
 app.get('/addBook',  
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    books.getAllBooks((allBooks) => { 
+    books.getAllBooks().then((allBooks) => { 
       res.render('webPages/addBook', { user: req.user, books: allBooks});
     });
-  });
+});
+
 app.post('/addBook',  
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
