@@ -6,7 +6,7 @@
               <select name="Course" id="Course" required>
                 <option value="" selected disabled>Choose a Course</option>
                 {{#each courses}}
-                    <option value="course">{{this.courseName}}</option>
+                    <option value={{this._id}}>{{this.courseName}}</option>
                 {{/each}}
               </select><br /> 
         </fieldset>
