@@ -8,6 +8,7 @@ const exphbs = require('express-handlebars');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
 const hash = bcrypt.hashSync("plainTextPassword");
+const static = express.static(__dirname + '/public');
 
 var books = require("./data/books");
 var users = require("./data/users");
@@ -101,7 +102,7 @@ passport.deserializeUser(function(id, cb) {
 
 // Create a new Express application.
 var app = express();
-
+app.use(express.static('public'))
 app.engine('handlebars', handlebarsInstance.engine);
 // Configure view engine to render EJS templates.
 app.set('views', __dirname + '/views');
@@ -172,6 +173,7 @@ app.get('/register',
   function(req, res){
     res.render('webPages/register');
   });
+
   
 app.post('/register',
   function(req, res) {
@@ -193,6 +195,13 @@ app.get('/profile',
   function(req, res){
     res.render('webPages/userProfile', { user: req.user});
   });
+
+app.get('/addBook',  
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    res.render('webPages/addBook', { user: req.user});
+  });
+
 
 app.post('/listBook', function(req, res) {
   // list book for sale
