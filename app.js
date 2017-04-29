@@ -31,6 +31,7 @@ var users = require("./data/users");
 //   console.log(courseArray);
 // })
 
+
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
     // Specify helpers which are only registered on this instance.
@@ -40,7 +41,12 @@ const handlebarsInstance = exphbs.create({
                 return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
         
             return new Handlebars.SafeString(JSON.stringify(obj));
-        }
+        },
+        select: (selected, options) => { // code taken from http://stackoverflow.com/questions/13046401/how-to-set-selected-select-option-in-handlebars-template
+          return options.fn(this).replace(
+              new RegExp(' value=\"' + selected + '\"'),
+              '$& selected="selected"');
+      }
     }
 });
 
@@ -213,7 +219,17 @@ app.get('/addBook',
 app.post('/addBook',  
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.render('webPages/addBook', { user: req.user});
+    if (req.body.isbn === undefined || req.body.isbn == "" || req.body.condition === undefined || req.body.condition == "" || req.body.price === undefined || req.body.price == "" ) {
+      res.render('webPages/addBook', { user: req.user, error: "Please fill in all the book information", isbn: req.body.isbn, condition: req.body.condition, price: req.body.price});
+      return;
+    } else {
+      let bookToAdd = {isbn: req.body.isbn, condition: req.body.condition, price: req.body.price };
+      users.addBookToUser(req.user._id, bookToAdd).then((i) => {
+        res.redirect('/profile');
+      }).catch((err) => {
+        res.render('webPages/addBook', { user: req.user, error: err, isbn: req.body.isbn, condition: req.body.condition, price: req.body.price});
+      });
+    }
   });
 
 

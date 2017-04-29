@@ -3,22 +3,24 @@
             <form action="/addBook" method="post">
                 <div class="form-group">
                     <label>Book ISBN</label>
-                    <input type="text" class="form-control" name="isbn">
+                    <input type="text" class="form-control" name="isbn" value={{isbn}}>
                 </div>
                 <div class="form-group">
                     <label>Condition</label></br/>
-                    <select>
+                    <select name="condition">
+                    {{#select condition}}
                     <option value="new">New</option>
                     <option value="like-new">Like New</option>
                     <option value="very-good">Very Good</option>
                     <option value="good">Good</option>
                     <option value="acceptable">Acceptable</option>
                     <option value="poor">Poor</option>
+                    {{/select}}
                     </select> 
                 </div>
                 <div class="form-group">
                     <label>Price</label>
-                    <input type="number" class="form-control" name="price">
+                    <input type="number" class="form-control" name="price" value={{price}}>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg">Add Book</button>
             </form>
