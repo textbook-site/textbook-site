@@ -1,10 +1,13 @@
 <article class="singleBook">
 	<h3>{{books.name}}</h3>
 	<h4>{{books.author}}</h4>
-	<p>{{books.courses.courseName}}</p>
-	{{#each prices}}
-		<p>Seller ID: {{this.sellerId}}</p>
-		<p>Seller Username: {{this.sellerUsername}}</p>
-		<p>Price: {{this.price}}</p>
-	{{/each}}
+	{{#if books.courses}}
+		{{#each books.courses}}
+			<p>Course ID: {{this.courseId}}</p>
+			<p>Course: {{this.courseName}}</p>
+			<p>Professor: {{this.professor}}</p>
+		{{/each}}
+	{{else}}
+		<p>There is no information about courses related to this book</p>
+	{{/if}}
 </article>
