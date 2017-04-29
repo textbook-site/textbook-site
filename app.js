@@ -269,7 +269,6 @@ app.post('/search', function(req, res) {
       res.render('webPages/searchPage', {courses: allCourses, books: booksForCourse });
     }).catch((err) => { res.render('webPages/searchPage', {courses: allCourses, error: err}); });
   });
-  // search by course, isbn, book name
 });
 app.get('/cart',
   function(req, res){
