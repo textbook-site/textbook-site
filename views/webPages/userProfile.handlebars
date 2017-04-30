@@ -12,6 +12,7 @@
 				<th>Author</th>
 				<th>Condition</th>
 				<th>Price</th>
+				<th>Operations</th>
 			</tr>
 		{{#each user.profile.books}}
 			<tr>
@@ -19,6 +20,12 @@
 				<td>{{this.author}}</td>
 				<td>{{this.condition}}</td>
 				<td>${{this.price}}</td>
+				<td>
+					<form action="post">
+						<a href="/editBook"><button class="btn btn-success">Edit</button><a>
+						<a href="/deleteBook"><button class="btn btn-danger">Delete</button></a>
+					</form>
+				</td>
 			{{/each}}
 			</tr>
 		</table>
