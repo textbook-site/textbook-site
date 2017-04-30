@@ -109,7 +109,8 @@ passport.deserializeUser(function(id, cb) {
 
 // Create a new Express application.
 var app = express();
-app.use(express.static('public'))
+// app.use(express.static('public'))
+app.use(static);
 app.engine('handlebars', handlebarsInstance.engine);
 // Configure view engine to render EJS templates.
 app.set('views', __dirname + '/views');
