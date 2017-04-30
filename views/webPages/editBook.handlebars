@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+            <form action="/editBook" method="post">
+                <div class="form-group">
+                    {{this.name}}
+                    </select> 
+                <div class="form-group">
+                    <label>Condition</label></br/>
+                    <select name="condition">
+                    {{#select condition}}
+                    <option value="New">New</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Very Good">Very Good</option>
+                    <option value="Good">Good</option>
+                    <option value="Acceptable">Acceptable</option>
+                    <option value="Poor">Poor</option>
+                    {{/select}}
+                    </select> 
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" step="0.01" class="form-control" name="price" value={{price} placeholder={{this.price}}>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Add Book</button>
+            </form>
+        {{#if error}}
+        {{error}}
+        {{/if}}
+    </div>
+</div>
