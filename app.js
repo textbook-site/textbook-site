@@ -143,14 +143,11 @@ app.get('/books/:id',
       var prices = [];
       users.getAllUsers().then((t_users) => {
         for (let user in t_users) {
-          // console.log(t_users[user]);
           var thisUser = t_users[user];
           for (let userBook in thisUser.profile.books) {
-            var thisBook = thisUser.profile.books[userBook];
-            console.log(thisBook);
-            if (thisBook.isbn == thisBook.isbn) {
-              prices.push({sellerId: thisUser._id, sellerUsername: thisUser.username, price: thisBook.price});
-              console.log("Price: " + thisBook.price);
+            var targetBook = thisUser.profile.books[userBook];
+            if (thisBook.isbn === targetBook.isbn) {
+              prices.push({sellerId: thisUser._id, sellerUsername: thisUser.username, condition: targetBook.condition, price: targetBook.price});
             }
           }
         }

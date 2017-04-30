@@ -12,18 +12,18 @@
                     <label>Condition</label></br/>
                     <select name="condition">
                     {{#select condition}}
-                    <option value="new">New</option>
-                    <option value="like-new">Like New</option>
-                    <option value="very-good">Very Good</option>
-                    <option value="good">Good</option>
-                    <option value="acceptable">Acceptable</option>
-                    <option value="poor">Poor</option>
+                    <option value="New">New</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Very Good">Very Good</option>
+                    <option value="Good">Good</option>
+                    <option value="Acceptable">Acceptable</option>
+                    <option value="Poor">Poor</option>
                     {{/select}}
                     </select> 
                 </div>
                 <div class="form-group">
                     <label>Price</label>
-                    <input type="number" class="form-control" name="price" value={{price}}>
+                    <input type="number" step="0.01" class="form-control" name="price" value={{price}}>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg">Add Book</button>
             </form>

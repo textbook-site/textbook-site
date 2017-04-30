@@ -2,14 +2,43 @@
 	<h3>{{books.name}}</h3>
 	<h4>{{books.author}}</h4>
 	{{#if books.courses}}
+	<h3>Course Info</h3>
+	<table class="table">
+		<tr>
+			<th>Course Id</th>
+			<th>Course Name</th>
+			<th>Professor</th>
+		</tr>
 		{{#each books.courses}}
-			<p>Course ID: {{this.courseId}}</p>
-			<p>Course: {{this.courseName}}</p>
-			<p>Professor: {{this.professor}}</p>
+		<tr>
+			<td>{{this.courseId}}</td>
+			<td>{{this.courseName}}</td>
+			<td>{{this.professor}}</td>
+		</tr>
 		{{/each}}
+	</table>
 	{{else}}
-		<p>There is no information about courses related to this book</p>
+	<p>There is no information about courses related to this book</p>
 	{{/if}}
 
+	{{#if prices}}
+	<h3>Available Sellers</h3>
+	<table class="table">
+		<tr>
+			<th>Seller Username</th>
+			<th>Condition</th>
+			<th>Price</th>
+		</tr>
+		{{#each prices}}
+		<tr>
+			<td>{{this.sellerUsername}}</td>
+			<td>{{this.condition}}</td>
+			<td>{{this.price}}</td>
+		</tr>
+		{{/each}}
+	</table>
+	{{else}}
+	<p>There is no information about courses related to this book</p>
+	{{/if}}
 
 </article>

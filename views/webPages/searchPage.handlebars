@@ -12,4 +12,18 @@
         </fieldset>
         <button type="submit" class="btn btn-warning btn-lg">search</button>
     </form>
+    {{#if this.books}}
+    <table class="table">
+        <tr>
+            <th>Book Title</th>
+            <th>Book Author</th>
+        </tr>
+        {{#each this.books}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.author}}</td>
+        </tr>
+        {{/each}}
+    </table>
+    {{/if}}
 </article>  

@@ -1,17 +1,17 @@
-			<h1>Welcome to our Site!</h1>
-			<h5>Below are some of the books currently for sale</h5>
-		<article class="home">
-		  <div id="wrapper">
-		    {{#each books}}
-			    <ul class="display_books">
-			      <li><a class="bookname" href="books/{{this._id}}">{{this.name}} by {{this.author}}</a></li>
-		      	</ul>
-		    {{/each}}
-		    {{#if errror}}
-		    {{error}}
-		    {{/if}}
-		  </div>
-		</article>
-		{{#if error}}
-        {{error}}
-        {{/if}}
+<h1>Welcome to our Site!</h1>
+<h5>Below are some of the books currently for sale</h5>
+<article>
+	<div>
+		{{#each books}}
+			<ul class="display_books">
+				<li><a class="bookname" href="books/{{this._id}}">{{this.name}} by {{this.author}}</a></li>
+				</ul>
+		{{/each}}
+		{{#if errror}}
+		{{error}}
+		{{/if}}
+	</div>
+</article>
+	{{#if error}}
+		{{error}}
+		{{/if}}

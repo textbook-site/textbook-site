@@ -1,18 +1,41 @@
-<article class="userProfile">
-	<h3>Welcome {{this.user.profile.name}}!</h3>
-	<img src="{{users.profileImage}}" width="200" />
+<h3>Welcome {{this.user.profile.name}}!</h3>
+<img src="{{users.profileImage}}" width="200" />
 
-		<h4>Book Inventory</h4>
-		<a href="/addBook"><button class="btn btn-primary">Add Book</button></a>
-	</form>
+	<h4>Book Inventory</h4>
+	<a href="/addBook"><button class="btn btn-primary">Add Book</button></a>
+</form>
 
-	<ul>
+{{!--<ul>
+	{{#if user.profile.books}}
+		{{#each user.profile.books}}
+			<li><a href="books/{{this.bookID}}">{{this.name}} by {{this.author}}  ${{this.price}}</a></li>
+		{{/each}}
+</ul>
+	{{else}}
+		<p>You currently have no books in your inventory!</p>
+	{{/if}}--}}
 		{{#if user.profile.books}}
-	    {{#each user.profile.books}}
-	      <li><a href="books/{{this.bookID}}">{{this.name}} by {{this.author}}</a></li>
-	    {{/each}}
-	</ul>
+			<table class="table inventory-table">
+			<tr>
+				<th>Book Name</th>
+				<th>Author</th>
+				<th>Condition</th>
+				<th>Price</th>
+			</tr>
+		{{#each user.profile.books}}
+			<tr>
+				<td>{{this.name}}</td>
+				<td>{{this.author}}</td>
+				<td>{{this.condition}}</td>
+				<td>${{this.price}}</td>
+			{{/each}}
+			</tr>
+		</table>
 		{{else}}
-			<p>You currently have no books in your inventory!</p>
+		<p>You currently have no books in your inventory!</p>
 		{{/if}}
-</article>
+
+
+	{{!--{{#if error}}
+		{{error}}
+		{{/if}}--}}
