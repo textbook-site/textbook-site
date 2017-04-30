@@ -148,7 +148,7 @@ app.get('/books/:id',
           for (let userBook in thisUser.profile.books) {
             var targetBook = thisUser.profile.books[userBook];
             if (thisBook.isbn === targetBook.isbn) {
-              prices.push({sellerId: thisUser._id, sellerUsername: thisUser.username, condition: targetBook.condition, price: targetBook.price});
+              prices.push({sellerId: thisUser._id, sellerUsername: thisUser.username, condition: targetBook.condition, price: targetBook.price, sellerBookId: targetBook._id});
             }
           }
         }
@@ -309,7 +309,7 @@ app.get('/search', function(req, res) {
   var allCourses;
   books.getAllCourses().then((courses) => {
     allCourses = courses;
-    res.render('webPages/searchPage', {courses: allCourses});
+    res.render('webPages/searchPage', {user: req.user, courses: allCourses});
   });
 });
 
@@ -318,7 +318,7 @@ app.post('/search', function(req, res) {
   books.getAllCourses().then((courses) => {
     allCourses = courses;
     if (req.body.Course === undefined || req.body.Course == "") {
-      res.render('webPages/searchPage', {courses: allCourses, error: "You must provide a course"});
+      res.render('webPages/searchPage', {user: req.user, courses: allCourses, error: "You must provide a course"});
       return;
     }
     books.getAllBooks().then((allBooks) => {
@@ -337,13 +337,61 @@ app.post('/search', function(req, res) {
 app.get('/cart',
   function(req, res){
     _cookies = new Cookies(req, res);
-    console.log(_cookies.get("shoppingCart"));
     var cart = _cookies.get("shoppingCart");
     if (cart === undefined)
       cart = "";
     else
       cart = JSON.parse(cart);
-    res.render('webPages/purchase', {books: cart});
+    res.render('webPages/purchase', {user: req.user, books: cart});
+  });
+app.get('/addToCart/:sellerId/:bookId',
+  function(req, res){
+    _cookies = new Cookies(req, res);
+    var book;
+    var jsonRes;
+    users.getUserById(req.params.sellerId).then((user) => {
+      for (var i in user.profile.books) {
+        let thisBook = user.profile.books[i];
+        if (thisBook._id == req.params.bookId) {
+          thisBook.sellerId = req.params.sellerId;
+          let cart = _cookies.get("shoppingCart");
+          if (cart === undefined || cart == "")
+            cart = [];
+          else
+            cart = JSON.parse(cart);
+          cart.push(thisBook);
+          _cookies.set("shoppingCart", JSON.stringify(cart));
+          jsonRes = {status: 0};
+        }
+      }
+      if (jsonRes === undefined) {
+        jsonRes = {status: 500, description: "An unknown error has occurred."}
+      }
+      res.json(jsonRes);
+    });
+  });
+app.get('/removeFromCart/:bookId',
+  function(req, res){
+    _cookies = new Cookies(req, res);
+    var book;
+    var jsonRes;
+    let cart = _cookies.get("shoppingCart");
+    if (cart === undefined || cart == "")
+      cart = [];
+    else
+      cart = JSON.parse(cart);
+    for (var i in cart) {
+      let thisBook = cart[i];
+      if (thisBook._id == req.params.bookId) {
+        cart.splice(i, 1);
+        _cookies.set("shoppingCart", JSON.stringify(cart));
+        jsonRes = {status: 0};
+      }
+    }
+    if (jsonRes === undefined) {
+      jsonRes = {status: 500, description: "An unknown error has occurred."}
+    }
+    res.json(jsonRes);
   });
 app.listen(3000, () => {
     console.log("We've now got a server!");
