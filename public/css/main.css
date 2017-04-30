@@ -3,9 +3,41 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 5px;
 }
 
+h1 {
+    font-size: 5rem;
+}
+#homeTitle {
+    margin-top: 1.5rem;
+    margin-left: 1.5rem;
+}
+/*
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+    }
+
+    
+
+    h6 {
+        font-size: 1.05rem;
+    }
+
+    p {
+        font-size: 1rem;
+        line-height: 2;
+    }*/
+
 .bookname{
     font-size: 2rem;
     color: black;
+    font-weight:bold;
 }
 img {
     margin:auto auto;
@@ -16,8 +48,6 @@ hr{
     border-top: dotted 1px;
 }
 
-
-
 a:hover:not(.active) {
     color: orange;
 }
@@ -26,22 +56,17 @@ a:hover:not(.active) {
     color: black;
     display: block;
     width: 100%;
-    border-radius: 5px;
     list-style: none;
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
-/*TABLE*/
-
-.inventory-table {
+#book {
     margin-top: 15px;
+    margin-bottom: 15px;
 }
-
 
 /*FOOTER*/
 
 .main-footer {
- margin-top: 10%;
- position: relative;
- bottom: 0;
+ margin-top: 10%;   
 }

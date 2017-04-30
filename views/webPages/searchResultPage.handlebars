@@ -1,0 +1,13 @@
+<article class="searchResult">
+    <h3>Here is what we found for you</h3>
+    <div>
+        <ul class="display_books">
+            {{#each books}}
+                  <li id="book"><a class="bookname" href="books/{{this._id}}">{{this.name}} by {{this.author}}</a></li>
+            {{/each}}
+        </ul>
+        {{#if errror}}
+        {{error}}
+        {{/if}}
+    </div>
+</article>  
