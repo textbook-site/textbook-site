@@ -5,15 +5,6 @@
 	<a href="/addBook"><button class="btn btn-primary">Add Book</button></a>
 </form>
 
-{{!--<ul>
-	{{#if user.profile.books}}
-		{{#each user.profile.books}}
-			<li><a href="books/{{this.bookID}}">{{this.name}} by {{this.author}}  ${{this.price}}</a></li>
-		{{/each}}
-</ul>
-	{{else}}
-		<p>You currently have no books in your inventory!</p>
-	{{/if}}--}}
 		{{#if user.profile.books}}
 			<table class="table inventory-table">
 			<tr>
@@ -35,7 +26,6 @@
 		<p>You currently have no books in your inventory!</p>
 		{{/if}}
 
-
-	{{!--{{#if error}}
+	{{#if error}}
 		{{error}}
-		{{/if}}--}}
+		{{/if}}
