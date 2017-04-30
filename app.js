@@ -230,6 +230,80 @@ app.post('/addBook',
     }
   });
 
+app.get('/editBook/:id',  
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    var bookID = req.params.id;
+    var userBooks = req.user.profile.books;
+    var bookToEdit = undefined;
+    for (let i in userBooks) {
+      if (userBooks[i]._id == bookID)
+        bookToEdit = userBooks[i];
+    }
+    if (bookToEdit === undefined)
+      res.redirect('/');
+    else {
+      // Add book information to the book for the user
+      books.getAllBooks().then((allBooks) => {
+        for (let _books in allBooks) {
+          if (bookToEdit.isbn == allBooks[_books].isbn) {
+              bookToEdit.name = allBooks[_books].name;
+              bookToEdit.author = allBooks[_books].author;
+              bookToEdit.bookID = allBooks[_books]._id;
+          }
+        }
+        res.render('webPages/editBook', { user: req.user, book: bookToEdit});
+      });
+    }
+});
+app.post('/editBook',  
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    var bookID = req.body.userBookID;
+    var condition = req.body.condition;
+    var price = req.body.price;
+    var userBooks = req.user.profile.books;
+    if (bookID === undefined || bookID == "" || condition === undefined || condition == "" || price === undefined || price == "") {
+      res.redirect('/profile', {error: "An error has occurred while updating your book. Please ensure all values are populated when updating a book"});
+      return;
+    }
+    var bookToEdit;
+    for (let i in userBooks) {
+      if (userBooks[i]._id == bookID)
+        bookToEdit = userBooks[i];
+    }
+    if (bookToEdit === undefined) 
+      res.redirect('/profile', {error: "An unexpected error has occurred while updating your book. Please try again."});
+
+    users.removeBookFromUser(req.user._id, bookToEdit).then((t) => {
+      bookToEdit.condition = condition;
+      bookToEdit.price = price;
+      users.addBookToUser(req.user._id, bookToEdit).then((x) => {
+        res.redirect('/profile');
+      });
+    }).catch((err) => { res.redirect('/profile', {error: "An unexpected error has occurred while updating your book. Please try again."}); });
+});
+app.post('/deleteBook',  
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    var bookID = req.body.userBookID;
+    var userBooks = req.user.profile.books;
+    if (bookID === undefined || bookID == "") {
+      res.redirect('/profile', {error: "An unexpected error has occurred while updating your book. Please try again."});
+      return;
+    }
+    var bookToDelete;
+    for (let i in userBooks) {
+      if (userBooks[i]._id == bookID)
+        bookToDelete = userBooks[i];
+    }
+    if (bookToDelete === undefined) 
+      res.redirect('/profile', {error: "An unexpected error has occurred while updating your book. Please try again."});
+
+    users.removeBookFromUser(req.user._id, bookToDelete).then((t) => {
+      res.redirect('/profile');
+    }).catch((err) => { res.redirect('/profile', {error: "An unexpected error has occurred while updating your book. Please try again."}); });
+});
 app.get('/search', function(req, res) {
   var allCourses;
   books.getAllCourses().then((courses) => {

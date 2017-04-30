@@ -92,6 +92,7 @@ let exportedMethods = {
             userCollection.updateOne({_id: userId}, {
                 $push: {
                     "profile.books": {
+                        _id: uuid.v4(),
                         isbn: bookInfo.isbn,
                         condition: bookInfo.condition,
                         price: bookInfo.price
@@ -105,8 +106,8 @@ let exportedMethods = {
         return users().then((userCollection) => {
             return userCollection.updateOne({_id: userId}, {
                 $pull: {
-                    inventory: {
-                        isbn: book.isbn
+                    "profile.books": {
+                        _id: book._id
                     }
                 }
             });

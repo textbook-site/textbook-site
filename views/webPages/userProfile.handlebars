@@ -21,9 +21,10 @@
 				<td>{{this.condition}}</td>
 				<td>${{this.price}}</td>
 				<td>
-					<form action="post">
-						<a href="/editBook"><button class="btn btn-success">Edit</button><a>
-						<a href="/deleteBook"><button class="btn btn-danger">Delete</button></a>
+					<form action="/deleteBook" method="post">
+						<a href="/editBook/{{this._id}}"><button type="button" class="btn btn-success">Edit</button><a>
+						<input type="hidden" name="userBookID" value="{{this._id}}"/>
+						<a href="/deleteBook"><button type="submit" class="btn btn-danger">Delete</button></a>
 					</form>
 				</td>
 			{{/each}}
