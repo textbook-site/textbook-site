@@ -10,6 +10,18 @@ const bcrypt = require("bcrypt-nodejs");
 const Cookies = require("cookies");
 const hash = bcrypt.hashSync("plainTextPassword");
 const static = express.static(__dirname + '/public');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+// const storage = multer.diskStorage({
+//   destination: function (req, file, callback) {
+//     callback(null, 'user_profile_images/')
+//   },
+//   filename: function (req, file, callback) {
+//     callback(null, Date.now() + '.jpg') //Appending .jpg
+//   }
+// })
+const upload = multer({ dest: "user_profile_images/" });
 
 var books = require("./data/books");
 var users = require("./data/users");
@@ -111,8 +123,9 @@ passport.deserializeUser(function(id, cb) {
 var app = express();
 // app.use(express.static('public'))
 app.use(static);
+app.use(express.static(__dirname + '/user_profile_images'));
 app.engine('handlebars', handlebarsInstance.engine);
-// Configure view engine to render EJS templates.
+// Configure view engine to render handlebars templates.
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 // Use application-level middleware for common functionality, including
@@ -121,6 +134,8 @@ app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+
+// in order to store user profile images
 
 
 app.use(flash());
@@ -284,7 +299,7 @@ app.post('/editBook',
       });
     }).catch((err) => { res.redirect('/profile', {error: "An unexpected error has occurred while updating your book. Please try again."}); });
 });
-app.get('/deleteBook',  
+app.post('/deleteBook',  
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
     var bookID = req.body.userBookID;
@@ -393,6 +408,31 @@ app.get('/removeFromCart/:bookId',
     }
     res.json(jsonRes);
   });
+
+app.post('/upload', upload.single('file'), function(req,res, next) {
+  let userProfilePath = req.user._id + ".jpg"
+  fs.rename( "./user_profile_images/" + req.file.filename, "./user_profile_images/" + userProfilePath,
+    function(err) {
+      if(err) {
+        res.send(err);
+      }
+      req.user.profile.profileImage = userProfilePath;
+        users.updateUser(req.user._id, req.user).then((updatedUser) => {
+          books.getAllBooks().then((allBooks) => {
+            for (let userBook in req.user.profile.books) {
+              for (let _books in allBooks) {
+                if (req.user.profile.books[userBook].isbn == allBooks[_books].isbn) {
+                    req.user.profile.books[userBook].name = allBooks[_books].name;
+                    req.user.profile.books[userBook].author = allBooks[_books].author;
+                    req.user.profile.books[userBook].bookID = allBooks[_books]._id;
+                }
+              }
+            }
+            res.redirect('/profile');
+        });
+      });
+  });
+});
 app.listen(3000, () => {
     console.log("We've now got a server!");
     console.log("Your routes will be running on http://localhost:3000");

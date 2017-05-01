@@ -72,8 +72,9 @@ let exportedMethods = {
             return userCollection.findOne({_id: id}).then((user) => {
                 let updatedUserData = {
                     profile: {
-                        name: updatedUser.name,
-                        profileImage: updatedUser.profileImage
+                        name: updatedUser.profile.name,
+                        profileImage: updatedUser.profile.profileImage,
+                        books: updatedUser.profile.books
                     }
                 }
 
