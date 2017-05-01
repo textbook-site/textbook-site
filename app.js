@@ -284,7 +284,7 @@ app.post('/editBook',
       });
     }).catch((err) => { res.redirect('/profile', {error: "An unexpected error has occurred while updating your book. Please try again."}); });
 });
-app.post('/deleteBook',  
+app.get('/deleteBook',  
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
     var bookID = req.body.userBookID;
