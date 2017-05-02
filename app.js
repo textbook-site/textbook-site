@@ -402,11 +402,17 @@ app.get('/removeFromCart/:bookId',
   });
 
 
-  app.get('/paymentInformation', 
-    require('connect-ensure-login').ensureLoggedIn(),
-    function(req, res) {
-      res.render("./webPages/paymentInformation");
-    });
+app.get('/paymentInformation', 
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res) {
+    res.render("./webPages/paymentInformation");
+  });
+
+app.post('/purchaseItems',
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res) {
+    //do things to remove items in cart from database
+  });
 
 
 app.post('/upload', upload.single('file'), function(req,res, next) {
