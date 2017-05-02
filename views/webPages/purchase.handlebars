@@ -1,35 +1,32 @@
-		<h3>Shopping Cart</h3>
-		{{#if books}}
-		<table class="table" id="purchaseItems">
-			<tr>
-				<th>ISBN</th>
-				<th>Condition</th>
-				<th>Price</th>
-				<th>Remove</th>
-			</tr>
-		{{#each books}}
-			<tr>
-				<td>{{this.isbn}}</td>
-				<td>{{this.condition}}</td>
-				<td class="bookPrice">{{this.price}}</td>
-				<td>
-					<form action="/removeFromCart/{{this._id}}" method="post">
-						<input type="hidden" name="bookId" value="{{this._id}}"/>
-						<a href="/removeFromCart/{{this._id}}">
-							<button type="button" class="btn btn-danger">Remove From Cart</button>
-						</a>
-
-
-					</form>
-
-				</td>
-
-			</tr>
-		{{/each}}
-		</table>
-		{{else}}
+<h3>Shopping Cart</h3>
+	{{#if books}}
+	<table class="table" id="purchaseItems">
+		<tr>
+			<th>ISBN</th>
+			<th>Condition</th>
+			<th>Price</th>
+			<th>Remove</th>
+		</tr>
+	{{#each books}}
+		<tr>
+			<td>{{this.isbn}}</td>
+			<td>{{this.condition}}</td>
+			<td class="bookPrice">{{this.price}}</td>
+			<td>
+				<form action="/removeFromCart/{{this._id}}" method="post">
+					<input type="hidden" name="bookId" value="{{this._id}}"/>
+					<a href="/removeFromCart/{{this._id}}">
+						<button type="button" class="btn btn-danger">Remove From Cart</button>
+					</a>
+				</form>
+			</td>
+		</tr>
+	{{/each}}
+	</table>
+		<a href="/paymentInformation"><button type="submit" class="btn btn-primary">Purchase</button></a>
+	{{else}}
 		<p>You shopping cart is empty.</p>
-		{{/if}}
+	{{/if}}
 	{{#if error}}
-	{{error}}
+		{{error}}
 	{{/if}}

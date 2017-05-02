@@ -61,7 +61,12 @@ a:hover:not(.active) {
     margin-top: 15px;
 }
 
+/*Payment Information Page*/
 
+.cardDetail {
+    display: inline;
+    margin: 5px;
+}
 
 /*FOOTER*/
 

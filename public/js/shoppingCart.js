@@ -11,6 +11,10 @@
                 total+= bookTotal;
             }
         }); 
-        $('#purchaseItems tr:last').after(`<tr><td></td><td>Total</td><td>$${total}</td><td></td></tr>`)
+
+
+
+
+
     });
 })()

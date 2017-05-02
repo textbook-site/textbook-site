@@ -401,6 +401,14 @@ app.get('/removeFromCart/:bookId',
     res.json(jsonRes);
   });
 
+
+  app.get('/paymentInformation', 
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+      res.render("./webPages/paymentInformation");
+    });
+
+
 app.post('/upload', upload.single('file'), function(req,res, next) {
   let userProfilePath = req.user._id + ".jpg"
   fs.rename( "./user_profile_images/" + req.file.filename, "./user_profile_images/" + userProfilePath,
