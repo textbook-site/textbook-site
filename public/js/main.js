@@ -42,7 +42,6 @@ function removeFromCart(bookId, itemToRemove) {
         }
       }
     });
-    console.log("Hi " + bookId);
 }
 
 $(document).ready(() => {
@@ -56,6 +55,4 @@ $(document).ready(() => {
             addToCart($(this).attr("sellerId"), $(this).attr("sellerBookId"));
         });
     });
-    // click(() => { console.log($(this)); removeFromCart($(this).attr("sellerBookId")); });
-    // $('.addToCartBtn').click(() => { console.log($(this)); addToCart($(this).attr("sellerId"), $(this).attr("sellerBookId")); });
 });
