@@ -28,14 +28,18 @@
 			<th>Seller Username</th>
 			<th>Condition</th>
 			<th>Price</th>
-			<th></th>
+			<th>Purchase</th>
 		</tr>
 		{{#each prices}}
 		<tr>
 			<td>{{this.sellerUsername}}</td>
 			<td>{{this.condition}}</td>
 			<td>{{this.price}}</td>
-			<td><a href="/addToCart/{{this.sellerId}}/{{this.sellerBookId}}">Add to Cart</a></td>
+			<td>
+				<a href="/addToCart/{{this.sellerId}}/{{this.sellerBookId}}">
+					<button type="button" class="btn btn-success">Add to Cart</button>
+				</a>
+			</td>
 		</tr>
 		{{/each}}
 	</table>

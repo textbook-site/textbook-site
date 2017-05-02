@@ -13,14 +13,6 @@ const static = express.static(__dirname + '/public');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-// const storage = multer.diskStorage({
-//   destination: function (req, file, callback) {
-//     callback(null, 'user_profile_images/')
-//   },
-//   filename: function (req, file, callback) {
-//     callback(null, Date.now() + '.jpg') //Appending .jpg
-//   }
-// })
 const upload = multer({ dest: "user_profile_images/" });
 
 var books = require("./data/books");
@@ -217,7 +209,7 @@ app.get('/profile',
               req.user.profile.books[userBook].bookID = allBooks[_books]._id;
           }
         }
-      }
+      } 
       res.render('webPages/userProfile', { user: req.user });
     });
   });
@@ -375,7 +367,7 @@ app.get('/addToCart/:sellerId/:bookId',
           else
             cart = JSON.parse(cart);
           cart.push(thisBook);
-          _cookies.set("shoppingCart", JSON.stringify(cart));
+          _cookies.set("shoppingCart", JSON.stringify(cart), { httpOnly: false });
           jsonRes = {status: 0};
         }
       }
@@ -399,7 +391,7 @@ app.get('/removeFromCart/:bookId',
       let thisBook = cart[i];
       if (thisBook._id == req.params.bookId) {
         cart.splice(i, 1);
-        _cookies.set("shoppingCart", JSON.stringify(cart));
+        _cookies.set("shoppingCart", JSON.stringify(cart), { httpOnly: false });
         jsonRes = {status: 0};
       }
     }

@@ -55,6 +55,13 @@ a:hover:not(.active) {
     height: 100%;
 }
 
+/*Purchase Page*/
+
+#purchaseItems {
+    margin-top: 15px;
+}
+
+
 
 /*FOOTER*/
 

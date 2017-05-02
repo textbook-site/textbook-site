@@ -1,23 +1,35 @@
-<div class="row">
-    <div class="col-md-4 col-md-offset-4">
-		<article class="purchase">
-			<h3>Shopping Cart</h3>
-			{{#if books}}
-				<div id="wrapper">
-				{{#each books}}
-				    <ul class="display_books">
-				      <li><a class="bookname" href="books/{{this._id}}">{{this.name}}</a></li>
-				  	</ul>
-				{{/each}}
-				</div>
-				<button type="submit" class="btn btn-primary btn-lg">Checkout</button>
-			{{else}}
-				<p>You shopping cart is empty.</p>
-			{{/if}}
-				
-		</article>
-		{{#if error}}
-        {{error}}
-        {{/if}}
-    </div>
-</div>
+		<h3>Shopping Cart</h3>
+		{{#if books}}
+		<table class="table" id="purchaseItems">
+			<tr>
+				<th>ISBN</th>
+				<th>Condition</th>
+				<th>Price</th>
+				<th>Remove</th>
+			</tr>
+		{{#each books}}
+			<tr>
+				<td>{{this.isbn}}</td>
+				<td>{{this.condition}}</td>
+				<td class="bookPrice">{{this.price}}</td>
+				<td>
+					<form action="/removeFromCart/{{this._id}}" method="post">
+						<input type="hidden" name="bookId" value="{{this._id}}"/>
+						<a href="/removeFromCart/{{this._id}}">
+							<button type="button" class="btn btn-danger">Remove From Cart</button>
+						</a>
+
+
+					</form>
+
+				</td>
+
+			</tr>
+		{{/each}}
+		</table>
+		{{else}}
+		<p>You shopping cart is empty.</p>
+		{{/if}}
+	{{#if error}}
+	{{error}}
+	{{/if}}
