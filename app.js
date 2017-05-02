@@ -115,7 +115,7 @@ passport.deserializeUser(function(id, cb) {
 var app = express();
 // app.use(express.static('public'))
 app.use(static);
-app.use(express.static(__dirname + '/user_profile_images'));
+//app.use(express.static(__dirname + '/user_profile_images'));
 app.engine('handlebars', handlebarsInstance.engine);
 // Configure view engine to render handlebars templates.
 app.set('views', __dirname + '/views');
@@ -341,7 +341,7 @@ app.post('/search', function(req, res) {
     }).catch((err) => { res.render('webPages/searchPage', {courses: allCourses, error: err}); });
   });
 });
-app.get('/cart',
+app.get('/cart', require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
     _cookies = new Cookies(req, res);
     var cart = _cookies.get("shoppingCart");
@@ -351,7 +351,7 @@ app.get('/cart',
       cart = JSON.parse(cart);
     res.render('webPages/purchase', {user: req.user, books: cart});
   });
-app.get('/addToCart/:sellerId/:bookId',
+app.get('/addToCart/:sellerId/:bookId', require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
     _cookies = new Cookies(req, res);
     var book;
@@ -415,7 +415,7 @@ app.post('/purchaseItems',
   });
 
 
-app.post('/upload', upload.single('file'), function(req,res, next) {
+app.post('/upload', require('connect-ensure-login').ensureLoggedIn(), upload.single('file'), function(req,res, next) {
   let userProfilePath = req.user._id + ".jpg"
   fs.rename( "./user_profile_images/" + req.file.filename, "./user_profile_images/" + userProfilePath,
     function(err) {
@@ -439,6 +439,12 @@ app.post('/upload', upload.single('file'), function(req,res, next) {
       });
   });
 });
+app.get('/userImage/:id',
+  function(req, res){
+    let userProfilePath = req.params.id + ".jpg"
+    res.sendfile("./user_profile_images/" + userProfilePath);
+});
+// app.get('/userImage/:id', function (req,res)
 app.listen(3000, () => {
     console.log("We've now got a server!");
     console.log("Your routes will be running on http://localhost:3000");
