@@ -3,6 +3,12 @@ const books = mongoCollections.books;
 const uuid = require('uuid');
 
 function uniqueValues(courseId, courseArray) {
+    if(courseId === '' || typeof(courseId) === 'undefined') {
+        throw("You must pass a valid course ID");
+    }
+    else if(typeof(courseArray) === 'undefined') {
+        throw("You must provide a valid list of courses");
+    }
     for(let i = 0; i < courseArray.length; i++) {
         if(courseId === courseArray[i].courseId)
             return false;
@@ -17,6 +23,9 @@ let exportedMethods = {
             });
     },
     getBookById(id) {
+        if(id === '' || typeof(id) === 'undefined') {
+            throw("You must provide a valid id");
+        }
         return books().then((bookCollection) => {
             return bookCollection.findOne({_id: id}).then((book) => {
                 if(!book) {
@@ -27,6 +36,9 @@ let exportedMethods = {
         });
     },
     getBookByIsbn(isbn) {
+        if(isbn === '' || typeof(id) === 'undefined') {
+            throw("You must provide a valid isbn");
+        }
         return books().then((bookCollection) => {
             return bookCollection.findOne({isbn: isbn}).then((book) => {
                 if(!book) {
@@ -37,6 +49,35 @@ let exportedMethods = {
         });
     },
     addBook(name, author, isbn, courses) {
+        var isbnRe = new RegExp(/\d{1,3}\d\d{1,2}\d{1,5}\d/);
+
+        if(name === '' || typeof(name) === 'undefined') {
+            throw("You must provide a valid name");
+        }
+        else if(author === '' || typeof(author) === 'undefined') {
+            throw("You must provide a valid author");
+        }
+        else if(isbn === '' || typeof(isbn) === 'undefined') {
+            throw("You must provide a valid isbn");
+        }
+        else if(!isbnRe.test(isbn)) {
+            throw("You must provide an isbn in the format xxx-x-xx-xxxxx-x");
+        }
+        else if(typeof(courses) === 'undefined') {
+            throw("You must provide a valid list of courses");
+        }
+        else if(courses.courseName === '' ||
+         typeof(courses.courseName === 'undefined')) {
+            throw("You must provide a valid course name");
+        }
+        else if(courses.courseId === '' ||
+         typeof(courses.courseId === 'undefined')) {
+            throw("You must provide a valid course id");
+        }
+        else if(courses.professor === '' ||
+         typeof(courses.professor === 'undefined')) {
+            throw("You must provide a valid professor name");
+        }
         return books().then((bookCollection) => {
             let newBook = {
                 _id: uuid.v4(),
@@ -61,6 +102,9 @@ let exportedMethods = {
         });
     },
     removeBook(id) {
+        if(id === '' || typeof(id) === 'undefined') {
+            throw("You must provide a valid id");
+        }
         return books().then((bookCollection) => {
             return bookCollection.removeOne({_id: id}).then((deletedInfo) => {
                 if(deletedInfo.deletedCount === 0) {
@@ -70,6 +114,12 @@ let exportedMethods = {
         });
     },
     updateBook(id, updatedBook) {
+        if(id === '' || typeof(id) === 'undefined') {
+            throw("You must provide a valid id");
+        }
+        else if(typeof(updatedBook) === 'undefined') {
+            throw("You must provide a valid book to updated");
+        }
         return books.then((bookCollection) => {
             return bookCollection.findOne({_id: id}).then((book) => {
                 let updatedBookData = {
@@ -89,6 +139,22 @@ let exportedMethods = {
         });
     },
     addCourseToBook(bookId, course) {
+        if(bookId === '' || typeof(bookId) === 'undefined') {
+            throw("You must provide a valid book id");
+        }
+        else if(typeof(course) === 'undefined') {
+            throw("You must provide a valid course");
+        }
+        else if(course.name === '' || typeof(course.name) === 'undefined') {
+            throw("You must provide a valid course name");
+        }
+        else if(course.courseId === '' || typeof(course.courseId) === 'undefined') {
+            throw("You must provide a valid course id");
+        }
+        else if(course.professor === '' || typeof(course.professor) === 'undefined') {
+            throw("You must provide a valid professor for the course");
+        }
+
         return books().then((bookCollection) => {
             return bookCollection.updateOne({_id: bookId},{
                 $push: {
@@ -116,6 +182,12 @@ let exportedMethods = {
         });
     },
     removeCourseFromBook(bookId, course) {
+        if(bookId === '' || typeof(bookId) === 'undefined') {
+            throw("You must provide a valid course id");
+        }
+        else if(typeof(course) === 'undefined') {
+            throw("You must pass a valid course to remove");
+        }
         return books().then((bookCollection) => {
             return bookCollection.removeOne({_id: id},{
                 $pull: {
