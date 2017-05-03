@@ -1,9 +1,9 @@
-<h3>Welcome {{this.user.profile.name}}!</h3>
+<p id="h3">Welcome {{this.user.profile.name}}!</p>
 	<div id="profileImage">
 		{{#if this.user.profile.profileImage}}
-			<img id="userImage" src="/userImage/{{user._id}}">
+			<img id="userImage" src="/userImage/{{user._id}}" alt="User Profile Image">
 		{{else}}
-			<img id="userImage" src="stock-avatar.jpg">
+			<img id="userImage" src="stock-avatar.jpg" alt="User Profile Image">
 		{{/if}}
 	</div>
 	<form method="post" enctype="multipart/form-data" action="/upload">
@@ -13,7 +13,7 @@
 	<input type="submit" value="Upload Image" class="btn btn-primary">	
 	</form>
 
-	<h4>Book Inventory</h4>
+	<p id="h4">Book Inventory</p>
 	<a href="/addBook"><button class="btn btn-primary">Add Book</button></a>
 
 </form>

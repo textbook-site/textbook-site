@@ -1,6 +1,6 @@
 <article class="search">
     <form method="post">
-        <h3>Search for a book</h3>
+        <p id="h3">Search for a book</p>
         <fieldset>
             <label for="Course" class="labelitem">Course:</label>
               <select name="Course" id="Course" required>
@@ -10,18 +10,21 @@
                 {{/each}}
               </select><br /> 
         </fieldset>
-        <button type="submit" class="btn btn-warning btn-lg">search</button>
+        <button type="submit" class="button btn btn-warning btn-lg">search</button>
     </form>
+    <hr>
     {{#if this.books}}
     <table class="table">
         <tr>
             <th>Book Title</th>
             <th>Book Author</th>
+            <th></th>
         </tr>
         {{#each this.books}}
         <tr>
             <td>{{this.name}}</td>
             <td>{{this.author}}</td>
+            <td><a href="books/{{this._id}}"><button class="button btn btn-warning">Buy</button></a></td>
         </tr>
         {{/each}}
     </table>
