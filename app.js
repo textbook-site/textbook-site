@@ -337,8 +337,8 @@ app.post('/search', function (req, res) {
           }
         }
       }
-      res.render('webPages/searchPage', { courses: allCourses, books: booksForCourse });
-    }).catch((err) => { res.render('webPages/searchPage', { courses: allCourses, error: err }); });
+      res.render('webPages/searchPage', {  user: req.user,courses: allCourses, books: booksForCourse });
+    }).catch((err) => { res.render('webPages/searchPage', {  user: req.user, courses: allCourses, error: err }); });
   });
 });
 app.get('/cart', require('connect-ensure-login').ensureLoggedIn(),
@@ -349,7 +349,7 @@ app.get('/cart', require('connect-ensure-login').ensureLoggedIn(),
       cart = "";
     else
       cart = JSON.parse(cart);
-    res.render('webPages/purchase', { user: req.user, books: cart });
+    res.render('webPages/cart', { user: req.user, books: cart });
   });
 app.get('/addToCart/:sellerId/:bookId', require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
@@ -366,20 +366,20 @@ app.get('/addToCart/:sellerId/:bookId', require('connect-ensure-login').ensureLo
             cart = [];
           else {
             cart = JSON.parse(cart);
-            // Check if this item is already in the cart, if it is disallow it
-            var itemAlreadyInCart = false;
-            for (var y in cart) {
-              if (cart[y]._id == req.params.bookId) {
-                itemAlreadyInCart = true;
-              }
+          }
+          // Check if this item is already in the cart, if it is disallow it
+          var itemAlreadyInCart = false;
+          for (var y in cart) {
+            if (cart[y]._id == req.params.bookId) {
+              itemAlreadyInCart = true;
             }
-            if (!itemAlreadyInCart) {
-              cart.push(thisBook);
-              _cookies.set("shoppingCart", JSON.stringify(cart), { httpOnly: false });
-              jsonRes = { status: 0 };
-            } else {
-              jsonRes = { status: 482 };
-            }
+          }
+          if (!itemAlreadyInCart) {
+            cart.push(thisBook);
+            _cookies.set("shoppingCart", JSON.stringify(cart), { httpOnly: false });
+            jsonRes = { status: 0 };
+          } else {
+            jsonRes = { status: 482 };
           }
         }
       }
@@ -417,13 +417,29 @@ app.get('/removeFromCart/:bookId',
 app.get('/paymentInformation',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    res.render("./webPages/paymentInformation");
+    res.render("./webPages/paymentInformation", { user: req.user });
   });
 
 app.post('/purchaseItems',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
     //do things to remove items in cart from database
+    _cookies = new Cookies(req, res);
+    let cart = _cookies.get("shoppingCart");
+    if (cart === undefined || cart == "")
+      cart = [];
+    else
+      cart = JSON.parse(cart);
+    for (var i in cart) {
+      let thisBook = cart[i];
+      users.removeBookFromUser(thisBook.sellerId, thisBook).then((i) => {
+        // _cookies.set("shoppingCart", JSON.stringify("[]"), { httpOnly: false });
+        res.clearCookie("shoppingCart");
+        res.render("./webPages/purchaseSuccess", { user: req.user });
+      }).catch((err) => {
+        res.render("./webPages/purchaseSuccess", { user: req.user, error: err });
+      });
+    }
   });
 
 
