@@ -16,15 +16,15 @@
 			<td>
 				<form action="/removeFromCart/{{this._id}}" method="post">
 					<input type="hidden" name="bookId" value="{{this._id}}"/>
-					{{!--<a href="/removeFromCart/{{this._id}}">--}}
-						<button type="button" class="btn btn-danger removeFromCartBtn" sellerBookId="{{this._id}}">Remove From Cart</button>
-					{{!--</a>--}}
+					<button class="btn btn-danger removeFromCartBtn button3">Remove From Cart</button>
 				</form>
 			</td>
 		</tr>
 	{{/each}}
 	</table>
-		<a href="/paymentInformation"><button type="submit" class="btn btn-primary">Purchase</button></a>
+	<form action="/paymentInformation" method="get">
+		<button class="btn btn-primary">Purchase</button>
+	</form>
 	{{else}}
 		<p>You shopping cart is empty.</p>
 	{{/if}}
