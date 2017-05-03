@@ -51,10 +51,7 @@ let exportedMethods = {
     addBook(name, author, isbn, courses) {
         var isbnRe = new RegExp(/\d{1,3}\d\d{1,2}\d{1,5}\d/);
 
-        if(name === '' || typeof(name) === 'undefined') {
-            throw("You must provide a valid name");
-        }
-        else if(author === '' || typeof(author) === 'undefined') {
+        if(author === '' || typeof(author) === 'undefined') {
             throw("You must provide a valid author");
         }
         else if(isbn === '' || typeof(isbn) === 'undefined') {
@@ -65,18 +62,6 @@ let exportedMethods = {
         }
         else if(typeof(courses) === 'undefined') {
             throw("You must provide a valid list of courses");
-        }
-        else if(courses.courseName === '' ||
-         typeof(courses.courseName === 'undefined')) {
-            throw("You must provide a valid course name");
-        }
-        else if(courses.courseId === '' ||
-         typeof(courses.courseId === 'undefined')) {
-            throw("You must provide a valid course id");
-        }
-        else if(courses.professor === '' ||
-         typeof(courses.professor === 'undefined')) {
-            throw("You must provide a valid professor name");
         }
         return books().then((bookCollection) => {
             let newBook = {

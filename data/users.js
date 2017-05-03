@@ -45,9 +45,6 @@ let exportedMethods = {
         else if(password === '' || typeof(password) === 'undefined') {
             throw('You must provide a valid password');
         }
-        else if(name === '' || typeof(name) === 'undefined') {
-            throw("You must provide a valid name");
-        }
         return users().then((userCollection) => {
             return userCollection.findOne({username: username}).then((user) => {
                 if(user) {
@@ -93,9 +90,7 @@ let exportedMethods = {
             throw("You must pass a user object");
         }
         return users().then((userCollection) => {
-            if(typeof(updatedUser.profile.name) === "") {
-                throw("You must provide a valid name");
-            }
+
             return userCollection.findOne({_id: id}).then((user) => {
                 let updatedUserData = {
                     profile: {
