@@ -12,17 +12,23 @@ h1 {
     font-size: 2rem;
 }
 
-#h4 {
+.h4 {
     font-size: 1.75rem;
     margin-bottom: 0.25rem;
 }
 
-#h3 {
+.h3 {
     font-size: 2.5rem;
 
 }
 .button {
     background: #a06c00;
+}
+.button2 {
+    background: #008a00;
+}
+.button3 {
+    background: #d4423c;
 }
 
 .navigation {
@@ -57,7 +63,7 @@ a:hover:not(.active) {
     margin-top: 25px;
 }
 
-#book {
+.book {
     margin-top: 15px;
     margin-bottom: 15px;
 }

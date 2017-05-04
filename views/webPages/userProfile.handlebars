@@ -1,4 +1,4 @@
-<p id="h3">Welcome {{this.user.profile.name}}!</p>
+<p class="h3">Welcome {{this.user.profile.name}}!</p>
 	<div id="profileImage">
 		{{#if this.user.profile.profileImage}}
 			<img id="userImage" src="/userImage/{{user._id}}" alt="User Profile Image">
@@ -13,10 +13,11 @@
 	<input type="submit" value="Upload Image" class="btn btn-primary">	
 	</form>
 
-	<p id="h4">Book Inventory</p>
-	<a href="/addBook"><button class="btn btn-primary">Add Book</button></a>
+	<p class="h4">Book Inventory</p>
+	<form style="display: inline" action="/addBook" method="get">
+		<button class="btn btn-primary">Add Book</button>
+	</form>
 
-</form>
 		{{#if user.profile.books}}
 			<table class="table inventory-table">
 			<tr>

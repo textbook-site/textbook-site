@@ -1,9 +1,9 @@
 <article class="singleBook">
 	<p id="infoMessage" class="bg-info hidden"></p>
-	<p id="h3">{{books.name}}</p>
-	<p id="h4">{{books.author}}</p>
+	<p class="h3">{{books.name}}</p>
+	<p class="h4">{{books.author}}</p>
 	{{#if books.courses}}
-	<p id="h3">Course Info</p>
+	<p class="h3">Course Info</p>
 	<table class="table">
 		<tr>
 			<th>Course Id</th>
@@ -23,7 +23,7 @@
 	{{/if}}
 
 	{{#if prices}}
-	<h3>Available Sellers</h3>
+	<p id="h3">Available Sellers</p>
 	<table class="table">
 		<tr>
 			<th>Seller Username</th>
@@ -37,9 +37,9 @@
 			<td>{{this.condition}}</td>
 			<td>{{this.price}}</td>
 			<td>
-				{{!--<a href="/addToCart/{{this.sellerId}}/{{this.sellerBookId}}">--}}
-					<button type="button" class="btn btn-success addToCartBtn" sellerId="{{this.sellerId}}" sellerBookId="{{this.sellerBookId}}">Add to Cart</button>
-				{{!--</a>--}}
+			<form style="display: inline" action="/addToCart/{{this.sellerId}}/{{this.sellerBookId}}" method="get">
+				<button class="btn btn-success addToCartBtn button2">Add to Cart</button>
+			</form>
 			</td>
 		</tr>
 		{{/each}}

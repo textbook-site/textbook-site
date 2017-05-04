@@ -2,14 +2,15 @@
     <div class="col-md-4 col-md-offset-4">
             <form action="/addBook" method="post">
                 <div class="form-group">
-                    <label>Book</label></br/>
+                    <label>Book</label><br/>
                     <select name="isbn">
                     {{#each books}}
                     <option value={{this.isbn}}>{{this.name}}</option>
                     {{/each}}
                     </select> 
+                    </div>
                 <div class="form-group">
-                    <label>Condition</label></br/>
+                    <label>Condition</label><br/>
                     <select name="condition">
                     {{#select condition}}
                     <option value="New">New</option>
@@ -23,7 +24,7 @@
                 </div>
                 <div class="form-group">
                     <label>Price</label>
-                    <input type="number" step="0.01" class="form-control" name="price" value={{price}}>
+                    <input type="number" step="0.01" class="form-control" name="price">
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg">Add Book</button>
             </form>
