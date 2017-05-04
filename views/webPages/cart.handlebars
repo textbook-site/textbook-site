@@ -14,10 +14,10 @@
 			<td>{{this.condition}}</td>
 			<td class="bookPrice">{{this.price}}</td>
 			<td>
-				<form action="/removeFromCart/{{this._id}}" method="post">
+				{{!--<form action="/removeFromCart/{{this._id}}" method="post">--}}
 					<input type="hidden" name="bookId" value="{{this._id}}"/>
-					<button class="btn btn-danger removeFromCartBtn button3">Remove From Cart</button>
-				</form>
+					<button class="btn btn-danger removeFromCartBtn button3" sellerBookId="{{this._id}}">Remove From Cart</button>
+				{{!--</form>--}}
 			</td>
 		</tr>
 	{{/each}}
