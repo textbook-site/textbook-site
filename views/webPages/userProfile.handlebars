@@ -3,7 +3,7 @@
 		{{#if this.user.profile.profileImage}}
 			<img id="userImage" src="/userImage/{{user._id}}" alt="User Profile Image">
 		{{else}}
-			<img id="userImage" src="stock-avatar.jpg" alt="User Profile Image">
+			<img id="userImage" src="/userImage/stock-avatar" alt="User Profile Image">
 		{{/if}}
 	</div>
 	<form method="post" enctype="multipart/form-data" action="/upload">
