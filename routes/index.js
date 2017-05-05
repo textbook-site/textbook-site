@@ -21,7 +21,7 @@ const constructorMethod = (app) => {
 app.get('/',
   function (req, res) {
     var theBooks = books.getAllBooks().then((bookss) => {
-      res.render('webPages/home', { books: bookss, user: req.user });
+      res.status(200).render('webPages/home', { books: bookss, user: req.user });
     });
   });
 
@@ -40,12 +40,12 @@ app.get('/books/:id',
           }
         }
       });
-      res.render('webPages/singlebook', { books: thisBook, user: req.user, prices: prices });
+      res.status(200).render('webPages/singlebook', { books: thisBook, user: req.user, prices: prices });
     });
   });
 app.get('/login',
   function (req, res) {
-    res.render('webPages/login', { error: req.flash('error'), title: "Login" });
+    res.status(200).render('webPages/login', { error: req.flash('error'), title: "Login" });
   });
 
 app.post('/login',
@@ -58,7 +58,7 @@ app.post('/login',
 
 app.get('/register',
   function (req, res) {
-    res.render('webPages/register');
+    res.status(200).render('webPages/register');
   });
 
 
@@ -68,13 +68,13 @@ app.post('/register',
     var password = req.body.password;
     var name = req.body.name;
     users.addUser(username, password, name).then((a) => {
-      res.redirect('/login');
-    }).catch((err) => { res.render('login/register', { error: err }); });
+      res.status(200).redirect('/login');
+    }).catch((err) => { res.status(401).render('login/register', { error: err }); });
   });
 app.get('/logout',
   function (req, res) {
     req.logout();
-    res.redirect('/');
+    res.status(200).redirect('/');
   });
 
 app.get('/profile',
@@ -90,7 +90,7 @@ app.get('/profile',
           }
         }
       }
-      res.render('webPages/userProfile', { user: req.user });
+      res.status(200).render('webPages/userProfile', { user: req.user });
     });
   });
 
@@ -98,7 +98,7 @@ app.get('/addBook',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
     books.getAllBooks().then((allBooks) => {
-      res.render('webPages/addBook', { user: req.user, books: allBooks });
+      res.status(200).render('webPages/addBook', { user: req.user, books: allBooks });
     });
   });
 
@@ -111,9 +111,9 @@ app.post('/addBook',
     } else {
       let bookToAdd = { isbn: req.body.isbn, condition: req.body.condition, price: req.body.price };
       users.addBookToUser(req.user._id, bookToAdd).then((i) => {
-        res.redirect('/profile');
+        res.status(200).redirect('/profile');
       }).catch((err) => {
-        res.render('webPages/addBook', { user: req.user, error: err, isbn: req.body.isbn, condition: req.body.condition, price: req.body.price });
+        res.status(404).render('webPages/addBook', { user: req.user, error: err, isbn: req.body.isbn, condition: req.body.condition, price: req.body.price });
       });
     }
   });
@@ -129,7 +129,7 @@ app.get('/editBook/:id',
         bookToEdit = userBooks[i];
     }
     if (bookToEdit === undefined)
-      res.redirect('/');
+      res.status(200).redirect('/');
     else {
       // Add book information to the book for the user
       books.getAllBooks().then((allBooks) => {
@@ -140,7 +140,7 @@ app.get('/editBook/:id',
             bookToEdit.bookID = allBooks[_books]._id;
           }
         }
-        res.render('webPages/editBook', { user: req.user, book: bookToEdit });
+        res.status(200).render('webPages/editBook', { user: req.user, book: bookToEdit });
       });
     }
   });
@@ -152,7 +152,7 @@ app.post('/editBook',
     var price = req.body.price;
     var userBooks = req.user.profile.books;
     if (bookID === undefined || bookID == "" || condition === undefined || condition == "" || price === undefined || price == "") {
-      res.redirect('/profile', { error: "An error has occurred while updating your book. Please ensure all values are populated when updating a book" });
+      res.status(404).redirect('/profile', { error: "An error has occurred while updating your book. Please ensure all values are populated when updating a book" });
       return;
     }
     var bookToEdit;
@@ -161,13 +161,13 @@ app.post('/editBook',
         bookToEdit = userBooks[i];
     }
     if (bookToEdit === undefined)
-      res.redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." });
+      res.status(404).redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." });
 
     users.removeBookFromUser(req.user._id, bookToEdit).then((t) => {
       bookToEdit.condition = condition;
       bookToEdit.price = price;
       users.addBookToUser(req.user._id, bookToEdit).then((x) => {
-        res.redirect('/profile');
+        res.status(200).redirect('/profile');
       });
     }).catch((err) => { res.redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." }); });
   });
@@ -177,7 +177,7 @@ app.post('/deleteBook',
     var bookID = req.body.userBookID;
     var userBooks = req.user.profile.books;
     if (bookID === undefined || bookID == "") {
-      res.redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." });
+      res.status(404).redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." });
       return;
     }
     var bookToDelete;
@@ -186,17 +186,17 @@ app.post('/deleteBook',
         bookToDelete = userBooks[i];
     }
     if (bookToDelete === undefined)
-      res.redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." });
+      res.status(404).redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." });
 
     users.removeBookFromUser(req.user._id, bookToDelete).then((t) => {
-      res.redirect('/profile');
-    }).catch((err) => { res.redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." }); });
+      res.status(200).redirect('/profile');
+    }).catch((err) => { res.status(404).redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." }); });
   });
 app.get('/search', function (req, res) {
   var allCourses;
   books.getAllCourses().then((courses) => {
     allCourses = courses;
-    res.render('webPages/searchPage', { user: req.user, courses: allCourses });
+    res.status(200).render('webPages/searchPage', { user: req.user, courses: allCourses });
   });
 });
 
@@ -205,7 +205,7 @@ app.post('/search', function (req, res) {
   books.getAllCourses().then((courses) => {
     allCourses = courses;
     if (req.body.Course === undefined || req.body.Course == "") {
-      res.render('webPages/searchPage', { user: req.user, courses: allCourses, error: "You must provide a course" });
+      res.status(200).render('webPages/searchPage', { user: req.user, courses: allCourses, error: "You must provide a course" });
       return;
     }
     books.getAllBooks().then((allBooks) => {
@@ -217,8 +217,8 @@ app.post('/search', function (req, res) {
           }
         }
       }
-      res.render('webPages/searchPage', {  user: req.user,courses: allCourses, books: booksForCourse });
-    }).catch((err) => { res.render('webPages/searchPage', {  user: req.user, courses: allCourses, error: err }); });
+      res.status(200).render('webPages/searchPage', {  user: req.user,courses: allCourses, books: booksForCourse });
+    }).catch((err) => { res.status(404).render('webPages/searchPage', {  user: req.user, courses: allCourses, error: err }); });
   });
 });
 app.get('/cart', require('connect-ensure-login').ensureLoggedIn(),
@@ -229,7 +229,7 @@ app.get('/cart', require('connect-ensure-login').ensureLoggedIn(),
       cart = "";
     else
       cart = JSON.parse(cart);
-    res.render('webPages/cart', { user: req.user, books: cart });
+    res.status(200).render('webPages/cart', { user: req.user, books: cart });
   });
 app.get('/addToCart/:sellerId/:bookId', require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
@@ -297,7 +297,7 @@ app.get('/removeFromCart/:bookId',
 app.get('/paymentInformation',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    res.render("./webPages/paymentInformation", { user: req.user });
+    res.status(200).render("./webPages/paymentInformation", { user: req.user });
   });
 
 app.post('/purchaseItems',
@@ -315,9 +315,9 @@ app.post('/purchaseItems',
       users.removeBookFromUser(thisBook.sellerId, thisBook).then((i) => {
         // _cookies.set("shoppingCart", JSON.stringify("[]"), { httpOnly: false });
         res.clearCookie("shoppingCart");
-        res.render("./webPages/purchaseSuccess", { user: req.user });
+        res.status(200).render("./webPages/purchaseSuccess", { user: req.user });
       }).catch((err) => {
-        res.render("./webPages/purchaseSuccess", { user: req.user, error: err });
+        res.status(404).render("./webPages/purchaseSuccess", { user: req.user, error: err });
       });
     }
   });
@@ -342,7 +342,7 @@ app.post('/upload', require('connect-ensure-login').ensureLoggedIn(), upload.sin
               }
             }
           }
-          res.redirect('/profile');
+          res.status(200).redirect('/profile');
         });
       });
     });
@@ -350,8 +350,14 @@ app.post('/upload', require('connect-ensure-login').ensureLoggedIn(), upload.sin
 app.get('/userImage/:id',
   function (req, res) {
     let userProfilePath = req.params.id + ".jpg"
-    res.sendfile("./user_profile_images/" + userProfilePath);
+    res.status(200).sendfile("./user_profile_images/" + userProfilePath);
   });
 // app.get('/userImage/:id', function (req,res)
+
+
+app.use('*', function(req, res) {
+  res.status(404).render('./webPages/404');
+})
+
 }
 module.exports = constructorMethod;
