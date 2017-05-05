@@ -80,6 +80,7 @@ app.get('/logout',
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
+    var error = xss(req.query.error);
     books.getAllBooks().then((allBooks) => {
       for (let userBook in req.user.profile.books) {
         for (let _books in allBooks) {
@@ -90,7 +91,7 @@ app.get('/profile',
           }
         }
       }
-      res.status(200).render('webPages/userProfile', { user: req.user });
+      res.status(200).render('webPages/userProfile', { user: req.user, error: error });
     });
   });
 
@@ -333,6 +334,20 @@ app.post('/purchaseItems',
 
 
 app.post('/upload', require('connect-ensure-login').ensureLoggedIn(), upload.single('file'), function (req, res, next) {
+
+  if (req.file === undefined) {
+    res.redirect("/profile?error=Please select a file to  upload!");
+    return;
+  }
+  var filetypes = /jpeg|jpg/;
+  var mimetype = filetypes.test(req.file.mimetype);
+  var extname = filetypes.test(path.extname(req.file.originalname).toLowerCase());
+
+  if (!mimetype || !extname) {
+    res.redirect("/profile?error=Only JPG files are supported at this time");
+    return;
+  }
+  
   let userProfilePath = req.user._id + ".jpg"
   fs.rename("./user_profile_images/" + req.file.filename, "./user_profile_images/" + userProfilePath,
     function (err) {
