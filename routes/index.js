@@ -6,7 +6,19 @@ const fs = require('fs');
 const books = require('../data/books');
 const users = require('../data/users');
 const multer = require('multer');
-const upload = multer({ dest: "./user_profile_images/" });
+const upload = multer({ dest: "./user_profile_images/", fileFilter: function (req, file, cb) {
+    // Code taken from https://github.com/expressjs/multer/issues/114
+    var filetypes = /jpeg|jpg/;
+    var mimetype = filetypes.test(file.mimetype);
+    var extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    
+    cb(null, false);
+    // cb("Error: File upload only supports the following filetypes - " + filetypes, false);
+  } });
 const Cookies = require("cookies");
 const bcrypt = require("bcrypt-nodejs");
 const hash = bcrypt.hashSync("plainTextPassword");
@@ -336,15 +348,7 @@ app.post('/purchaseItems',
 app.post('/upload', require('connect-ensure-login').ensureLoggedIn(), upload.single('file'), function (req, res, next) {
 
   if (req.file === undefined) {
-    res.redirect("/profile?error=Please select a file to  upload!");
-    return;
-  }
-  var filetypes = /jpeg|jpg/;
-  var mimetype = filetypes.test(req.file.mimetype);
-  var extname = filetypes.test(path.extname(req.file.originalname).toLowerCase());
-
-  if (!mimetype || !extname) {
-    res.redirect("/profile?error=Only JPG files are supported at this time");
+    res.redirect("/profile?error=Please select a file to  upload! Only JPG files are supported at this time");
     return;
   }
   
@@ -352,7 +356,7 @@ app.post('/upload', require('connect-ensure-login').ensureLoggedIn(), upload.sin
   fs.rename("./user_profile_images/" + req.file.filename, "./user_profile_images/" + userProfilePath,
     function (err) {
       if (err) {
-        res.send(err);
+        res.redirect("/profile?error=" + err);
       }
       req.user.profile.profileImage = userProfilePath;
       users.updateUser(req.user._id, req.user).then((updatedUser) => {
