@@ -45,7 +45,8 @@ app.get('/books/:id',
   });
 app.get('/login',
   function (req, res) {
-    res.status(200).render('webPages/login', { error: req.flash('error'), title: "Login" });
+    var registration = req.query.registration;
+    res.status(200).render('webPages/login', { error: req.flash('error'), registration: registration });
   });
 
 app.post('/login',
@@ -68,8 +69,8 @@ app.post('/register',
     var password = req.body.password;
     var name = req.body.name;
     users.addUser(username, password, name).then((a) => {
-      res.status(200).redirect('/login');
-    }).catch((err) => { res.status(401).render('login/register', { error: err }); });
+      res.status(200).redirect('/login?registration=true');
+    }).catch((err) => { res.status(401).render('webPages/register', { error: err, username: username, name: name }); });
   });
 app.get('/logout',
   function (req, res) {
