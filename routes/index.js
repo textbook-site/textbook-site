@@ -11,7 +11,7 @@ const Cookies = require("cookies");
 const bcrypt = require("bcrypt-nodejs");
 const hash = bcrypt.hashSync("plainTextPassword");
 const path = require('path');
-
+const xss = require("xss");
 
 
 require('../passport-config/passport-strats.js')(passport, Strategy);
@@ -27,7 +27,7 @@ app.get('/',
 
 app.get('/books/:id',
   function (req, res) {
-    var theBooks = books.getBookById(req.params.id).then((thisBook) => {
+    var theBooks = books.getBookById(xss(req.params.id)).then((thisBook) => {
       var prices = [];
       users.getAllUsers().then((t_users) => {
         for (let user in t_users) {
@@ -45,7 +45,7 @@ app.get('/books/:id',
   });
 app.get('/login',
   function (req, res) {
-    var registration = req.query.registration;
+    var registration = xss(req.query.registration);
     res.status(200).render('webPages/login', { error: req.flash('error'), registration: registration });
   });
 
@@ -65,9 +65,9 @@ app.get('/register',
 
 app.post('/register',
   function (req, res) {
-    var username = req.body.username;
-    var password = req.body.password;
-    var name = req.body.name;
+    var username = xss(req.body.username);
+    var password = xss(req.body.password);
+    var name = xss(req.body.name);
     users.addUser(username, password, name).then((a) => {
       res.status(200).redirect('/login?registration=true');
     }).catch((err) => { res.status(401).render('webPages/register', { error: err, username: username, name: name }); });
@@ -106,7 +106,7 @@ app.get('/addBook',
 app.post('/addBook',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    var price = parseInt(req.body.price);
+    var price = parseInt(xss(req.body.price));
     if (req.body.isbn === undefined || req.body.isbn == "" || req.body.condition === undefined || req.body.condition == "" || req.body.price === undefined || req.body.price == "") {
       books.getAllBooks().then((allBooks) => {
         res.render('webPages/addBook', { user: req.user, error: "Please fill in all the book information", isbn: req.body.isbn, condition: req.body.condition, price: req.body.price, books: allBooks });
@@ -120,11 +120,11 @@ app.post('/addBook',
       });
     } else {
       price = price.toFixed(2);
-      let bookToAdd = { isbn: req.body.isbn, condition: req.body.condition, price: price };
+      let bookToAdd = { isbn: xss(req.body.isbn), condition: xss(req.body.condition), price: price };
       users.addBookToUser(req.user._id, bookToAdd).then((i) => {
         res.status(200).redirect('/profile');
       }).catch((err) => {
-        res.status(404).render('webPages/addBook', { user: req.user, error: err, isbn: req.body.isbn, condition: req.body.condition, price: req.body.price });
+        res.status(404).render('webPages/addBook', { user: req.user, error: err, isbn: xss(req.body.isbn), condition: xss(req.body.condition), price: req.body.price });
       });
     }
   });
@@ -132,7 +132,7 @@ app.post('/addBook',
 app.get('/editBook/:id',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    var bookID = req.params.id;
+    var bookID = xss(req.params.id);
     var userBooks = req.user.profile.books;
     var bookToEdit = undefined;
     for (let i in userBooks) {
@@ -158,9 +158,9 @@ app.get('/editBook/:id',
 app.post('/editBook',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    var bookID = req.body.userBookID;
-    var condition = req.body.condition;
-    var price = req.body.price;
+    var bookID = xss(req.body.userBookID);
+    var condition = xss(req.body.condition);
+    var price = xss(req.body.price);
     var userBooks = req.user.profile.books;
     if (bookID === undefined || bookID == "" || condition === undefined || condition == "" || price === undefined || price == "") {
       res.status(404).redirect('/profile', { error: "An error has occurred while updating your book. Please ensure all values are populated when updating a book" });
@@ -185,7 +185,7 @@ app.post('/editBook',
 app.post('/deleteBook',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    var bookID = req.body.userBookID;
+    var bookID = xss(req.body.userBookID);
     var userBooks = req.user.profile.books;
     if (bookID === undefined || bookID == "") {
       res.status(404).redirect('/profile', { error: "An unexpected error has occurred while updating your book. Please try again." });
@@ -223,7 +223,7 @@ app.post('/search', function (req, res) {
       var booksForCourse = [];
       for (var i in allBooks) {
         for (var y in allBooks[i].courses) {
-          if (req.body.Course == allBooks[i].courses[y]._id) {
+          if (xss(req.body.Course) == allBooks[i].courses[y]._id) {
             booksForCourse.push(allBooks[i]);
           }
         }
@@ -247,11 +247,11 @@ app.get('/addToCart/:sellerId/:bookId', require('connect-ensure-login').ensureLo
     _cookies = new Cookies(req, res);
     var book;
     var jsonRes;
-    users.getUserById(req.params.sellerId).then((user) => {
+    users.getUserById(xss(req.params.sellerId)).then((user) => {
       for (var i in user.profile.books) {
         let thisBook = user.profile.books[i];
-        if (thisBook._id == req.params.bookId) {
-          thisBook.sellerId = req.params.sellerId;
+        if (thisBook._id == xss(req.params.bookId)) {
+          thisBook.sellerId = xss(req.params.sellerId);
           let cart = _cookies.get("shoppingCart");
           if (cart === undefined || cart == "")
             cart = [];
@@ -261,7 +261,7 @@ app.get('/addToCart/:sellerId/:bookId', require('connect-ensure-login').ensureLo
           // Check if this item is already in the cart, if it is disallow it
           var itemAlreadyInCart = false;
           for (var y in cart) {
-            if (cart[y]._id == req.params.bookId) {
+            if (cart[y]._id == xss(req.params.bookId)) {
               itemAlreadyInCart = true;
             }
           }
@@ -292,7 +292,7 @@ app.get('/removeFromCart/:bookId',
       cart = JSON.parse(cart);
     for (var i in cart) {
       let thisBook = cart[i];
-      if (thisBook._id == req.params.bookId) {
+      if (thisBook._id == xss(req.params.bookId)) {
         cart.splice(i, 1);
         _cookies.set("shoppingCart", JSON.stringify(cart), { httpOnly: false });
         jsonRes = { status: 0 };
@@ -324,7 +324,6 @@ app.post('/purchaseItems',
     for (var i in cart) {
       let thisBook = cart[i];
       users.removeBookFromUser(thisBook.sellerId, thisBook).then((i) => {
-        // _cookies.set("shoppingCart", JSON.stringify("[]"), { httpOnly: false });
         res.clearCookie("shoppingCart");
         res.status(200).render("./webPages/purchaseSuccess", { user: req.user });
       }).catch((err) => {
