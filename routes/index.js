@@ -53,7 +53,6 @@ app.post('/login',
   passport.authenticate('local', { failureRedirect: '/login', failureFlash: 'Invalid username or password.' }),
   function (req, res) {
     res.redirect('/');
-    // res.render('webPages/home', { user: req.user } );
     return;
   });
 
