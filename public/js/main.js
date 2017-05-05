@@ -47,12 +47,12 @@ function removeFromCart(bookId, itemToRemove) {
 $(document).ready(() => {
     $('.removeFromCartBtn').each(function() {
         $(this).on("click", function() {
-            removeFromCart($(this).attr("sellerBookId"), $(this));
+            removeFromCart($(this).attr("data-sellerBookId"), $(this));
         });
     });
     $('button.addToCartBtn').each(function() {
         $(this).on("click", function() {
-            addToCart($(this).attr("sellerId"), $(this).attr("sellerBookId"));
+            addToCart($(this).attr("data-sellerId"), $(this).attr("data-sellerBookId"));
         });
     });
 });
