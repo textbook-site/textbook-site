@@ -106,11 +106,21 @@ app.get('/addBook',
 app.post('/addBook',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
+    var price = parseInt(req.body.price);
     if (req.body.isbn === undefined || req.body.isbn == "" || req.body.condition === undefined || req.body.condition == "" || req.body.price === undefined || req.body.price == "") {
-      res.render('webPages/addBook', { user: req.user, error: "Please fill in all the book information", isbn: req.body.isbn, condition: req.body.condition, price: req.body.price });
-      return;
+      books.getAllBooks().then((allBooks) => {
+        res.render('webPages/addBook', { user: req.user, error: "Please fill in all the book information", isbn: req.body.isbn, condition: req.body.condition, price: req.body.price, books: allBooks });
+        return;
+      });
+    } else if (typeof price !== "number") {
+      books.getAllBooks().then((allBooks) => {
+        console.log(typeof req.body.price);
+        res.render('webPages/addBook', { user: req.user, error: "Please provide a number for the price of the book", isbn: req.body.isbn, condition: req.body.condition, price: req.body.price, books: allBooks });
+        return;
+      });
     } else {
-      let bookToAdd = { isbn: req.body.isbn, condition: req.body.condition, price: req.body.price };
+      price = price.toFixed(2);
+      let bookToAdd = { isbn: req.body.isbn, condition: req.body.condition, price: price };
       users.addBookToUser(req.user._id, bookToAdd).then((i) => {
         res.status(200).redirect('/profile');
       }).catch((err) => {
