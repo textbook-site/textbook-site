@@ -336,12 +336,17 @@ app.post('/purchaseItems',
     for (var i in cart) {
       let thisBook = cart[i];
       users.removeBookFromUser(thisBook.sellerId, thisBook).then((i) => {
-        res.clearCookie("shoppingCart");
-        res.status(200).render("./webPages/purchaseSuccess", { user: req.user });
+        // res.clearCookie("shoppingCart");
+        _cookies.set("shoppingCart", JSON.stringify([]), { httpOnly: false });
       }).catch((err) => {
         res.status(404).render("./webPages/purchaseSuccess", { user: req.user, error: err });
+        return;
       });
     }
+    if (cart == []) {
+      res.render("./webPages/purchaseSuccess", { user: req.user, error: "There are no items in your shopping cart for purchase" });
+    }
+    res.status(200).render("./webPages/purchaseSuccess", { user: req.user });
   });
 
 
