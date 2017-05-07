@@ -118,7 +118,7 @@ app.get('/addBook',
 app.post('/addBook',
   require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    var price = parseInt(xss(req.body.price));
+    var price = parseFloat(xss(req.body.price));
     if (req.body.isbn === undefined || req.body.isbn == "" || req.body.condition === undefined || req.body.condition == "" || req.body.price === undefined || req.body.price == "") {
       books.getAllBooks().then((allBooks) => {
         res.render('webPages/addBook', { user: req.user, error: "Please fill in all the book information", isbn: req.body.isbn, condition: req.body.condition, price: req.body.price, books: allBooks });
@@ -131,7 +131,10 @@ app.post('/addBook',
         return;
       });
     } else {
+
       price = price.toFixed(2);
+      price = parseFloat(price);
+      console.log(price)
       let bookToAdd = { isbn: xss(req.body.isbn), condition: xss(req.body.condition), price: price };
       users.addBookToUser(req.user._id, bookToAdd).then((i) => {
         res.status(200).redirect('/profile');

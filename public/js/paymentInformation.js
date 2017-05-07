@@ -14,7 +14,10 @@
 
             if(cardName === "" || cardNumber === "" || address === "" ||
                 cvc === "") {
-                    alert("You must provide information in each field");
+                alert("You must provide information in each field");
+            }
+            else if(cardNumber.length != 15) {
+                alert("You must provide a valid credit card number");   
             }
             else if(isNaN(cvc) || cvc.length > 3) {
                 alert("CVC must be a valid number");
@@ -22,7 +25,9 @@
             else if(expirationDate < new Date()) {
                 alert("The card with this expiration date has expired.");
             }
-            $.post("/purchaseItems", {});
+            else {
+                $.post("/purchaseItems", {});
+            }
         });
     });
 })($);
